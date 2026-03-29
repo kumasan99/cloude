@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI参謀 - 経営相談</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <div class="app">
+    <header class="header">
+      <h1>AI参謀</h1>
+      <p class="subtitle">あなたの経営をサポートするAIコンサルタント</p>
+    </header>
+
+    <nav class="mode-tabs">
+      <button class="tab active" data-mode="chat">
+        <span class="tab-icon">💬</span>
+        経営相談
+      </button>
+      <button class="tab" data-mode="financial">
+        <span class="tab-icon">📊</span>
+        財務アドバイス
+      </button>
+      <button class="tab" data-mode="plan">
+        <span class="tab-icon">📋</span>
+        事業計画作成
+      </button>
+    </nav>
+
+    <div class="chat-container" id="chatContainer">
+      <div class="welcome-message">
+        <div class="welcome-icon">🏢</div>
+        <h2>経営相談モード</h2>
+        <p>経営に関するお悩みをお聞かせください。<br>具体的な状況を教えていただけると、より的確なアドバイスが可能です。</p>
+        <div class="example-questions">
+          <button class="example-btn" onclick="sendExample(this)">売上が伸び悩んでいます。どう改善すればいいですか？</button>
+          <button class="example-btn" onclick="sendExample(this)">新規事業を始めたいのですが、何から手をつければいいですか？</button>
+          <button class="example-btn" onclick="sendExample(this)">人材採用がうまくいきません。アドバイスをください。</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="input-area">
+      <textarea
+        id="messageInput"
+        placeholder="経営に関する質問を入力してください..."
+        rows="1"
+      ></textarea>
+      <button id="sendBtn" onclick="sendMessage()">送信</button>
+    </div>
+  </div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
