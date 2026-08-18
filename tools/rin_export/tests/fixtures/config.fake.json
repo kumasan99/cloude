@@ -1,0 +1,45 @@
+{
+  "base_url": "http://127.0.0.1:8799",
+  "timeout_ms": 15000,
+  "login": {
+    "url": "/login",
+    "user_selector": "#userId",
+    "password_selector": "#password",
+    "submit_selector": "#loginButton",
+    "success_selector": "#officeTable"
+  },
+  "offices": {
+    "mode": "links",
+    "list_url": "/offices",
+    "ready_selector": "#officeTable",
+    "row_selector": "#officeTable a.officeLink",
+    "id_pattern": "officeId=(\\d+)"
+  },
+  "users": {
+    "list_url_template": "/office?officeId={office_id}",
+    "ready_selector": "#userTable",
+    "row_selector": "#userTable tbody tr",
+    "name_selector": "a.userLink",
+    "link_selector": "a.userLink",
+    "id_pattern": "userId=(\\d+)"
+  },
+  "record": {
+    "mode": "ui",
+    "ready_selector": "#supportRecordTable",
+    "ui": {
+      "user_detail_url_template": "/userDetail?userId={user_id}",
+      "performance_tab_selector": "#performanceTab",
+      "performance_ready_selector": "#supportRecordMonthlyLink",
+      "record_link_selector": "#supportRecordMonthlyLink",
+      "year_select": "#year",
+      "month_select": "#month",
+      "apply_selector": "#applyPeriod"
+    }
+  },
+  "output": {
+    "dir": "out",
+    "months": ["2026-01", "2026-02", "2026-03", "2026-04", "2026-05", "2026-06", "2026-07"],
+    "wait_ms": 30,
+    "inject_base_href": true
+  }
+}

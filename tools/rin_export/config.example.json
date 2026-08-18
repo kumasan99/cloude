@@ -1,0 +1,63 @@
+{
+  "base_url": "https://www.project-rin.net",
+  "timeout_ms": 30000,
+
+  "_memo": "★印の値は RIN の実際の画面を見ないと確定できません。inspect コマンドで保存した HTML を見ながら埋めてください。",
+
+  "login": {
+    "url": "/rin/login",
+    "user_selector": "★ログインIDの入力欄（例: #loginId）",
+    "password_selector": "★パスワードの入力欄（例: #password）",
+    "submit_selector": "★ログインボタン（例: button[type=submit]）",
+    "success_selector": "★ログイン後にだけ現れる要素"
+  },
+
+  "offices": {
+    "_memo": "事業所の切替が無ければ mode を fixed にして list を1件だけ書く。",
+    "mode": "links",
+    "list_url": "★事業所一覧のURL",
+    "ready_selector": "★事業所一覧の目印になる要素",
+    "row_selector": "★事業所名のリンク",
+    "id_pattern": "officeId=(\\d+)",
+    "only": []
+  },
+
+  "users": {
+    "list_url_template": "★利用者一覧のURL（例: /rin/user/list?officeId={office_id}）",
+    "ready_selector": "★利用者一覧の目印になる要素",
+    "row_selector": "★利用者1名分の行（例: #userTable tbody tr）",
+    "name_selector": "★行の中の利用者名（例: a.userLink）",
+    "link_selector": "★行の中の詳細へのリンク（例: a.userLink）",
+    "id_pattern": "userId=(\\d+)",
+    "pagination": {
+      "mode": "none",
+      "next_selector": "★「次へ」のリンク（ページ送りがある場合のみ）",
+      "max_pages": 100,
+      "wait_ms": 500
+    }
+  },
+
+  "record": {
+    "_memo": "URL に利用者IDと年月を渡せるなら mode=url が速い。渡せない場合は mode=ui で画面をクリックしてたどる。",
+    "mode": "ui",
+    "ready_selector": "★提供実績記録表の目印になる要素",
+    "url_template": "/rin/userDetail/supportRecordMonthly?userId={user_id}&year={year}&month={month}",
+    "ui": {
+      "user_detail_url_template": "/rin/userDetail?userId={user_id}",
+      "performance_tab_selector": "★「提供実績」タブ",
+      "performance_ready_selector": "★提供実績タブの表示完了の目印",
+      "record_link_selector": "★「提供実績記録表」を開くリンク/ボタン",
+      "year_select": "★年のプルダウン",
+      "month_select": "★月のプルダウン",
+      "month_zero_pad": false,
+      "apply_selector": "★「表示」ボタン"
+    }
+  },
+
+  "output": {
+    "dir": "out",
+    "months": ["2026-01", "2026-02", "2026-03", "2026-04", "2026-05", "2026-06", "2026-07"],
+    "wait_ms": 800,
+    "inject_base_href": true
+  }
+}

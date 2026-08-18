@@ -2,3 +2,9 @@
 __pycache__/
 *.pyc
 .venv/
+
+# RIN 保存ツール（社内URL・ログインセッション・個人情報を含む出力）
+tools/rin_export/config.json
+tools/rin_export/state.json
+tools/rin_export/out/
+tools/rin_export/out-*/
