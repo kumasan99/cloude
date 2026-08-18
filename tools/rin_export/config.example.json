@@ -3,9 +3,13 @@
   "timeout_ms": 30000,
 
   "_memo": "★印の値は RIN の実際の画面を見ないと確定できません。inspect コマンドで保存した HTML を見ながら埋めてください。",
+  "_memo_home": "home_url はログイン後に最初に開く画面。inspect が 00_ログイン直後.html として保存するので、事業所一覧や利用者一覧への入口を探す起点になります。",
+
+  "home_url": "/rin/home",
 
   "login": {
-    "url": "/rin/login",
+    "_memo": "url は実際のログイン画面に合わせてください（RIN では /rin/signup-resow から入ります）。",
+    "url": "/rin/signup-resow",
     "user_selector": "★ログインIDの入力欄（例: #loginId）",
     "password_selector": "★パスワードの入力欄（例: #password）",
     "submit_selector": "★ログインボタン（例: button[type=submit]）",

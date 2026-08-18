@@ -59,6 +59,31 @@ def die(message: str) -> None:
     sys.exit(1)
 
 
+class NotConfigured(Exception):
+    """config.json の★印が埋まっていない項目があることを表す。"""
+
+
+def is_placeholder(value: Any) -> bool:
+    """config.example.json の★印のまま（未設定）かどうか。"""
+    return not isinstance(value, str) or not value.strip() or value.lstrip().startswith("★")
+
+
+def configured(value: Any) -> str:
+    """埋まっていれば値を返し、★のままなら空文字を返す（任意項目の判定用）。"""
+    return "" if is_placeholder(value) else value.strip()
+
+
+def need(section: dict[str, Any], key: str, path: str) -> str:
+    """必須項目を取り出す。★のままなら、どこを埋めればよいかを示して止める。"""
+    value = (section or {}).get(key, "")
+    if is_placeholder(value):
+        raise NotConfigured(
+            f"config.json の {path} がまだ★のままです。"
+            "inspect で保存した HTML を見てセレクタを埋めてください。"
+        )
+    return value.strip()
+
+
 # --------------------------------------------------------------------------
 # 値オブジェクト
 # --------------------------------------------------------------------------
@@ -146,8 +171,9 @@ def absolute_url(config: dict[str, Any], url: str) -> str:
 
 def goto(page: Page, config: dict[str, Any], url: str, ready_selector: str | None = None) -> None:
     page.goto(absolute_url(config, url), wait_until="domcontentloaded")
-    if ready_selector:
-        page.wait_for_selector(ready_selector)
+    ready = configured(ready_selector)
+    if ready:
+        page.wait_for_selector(ready)
 
 
 def clean_text(raw: str) -> str:
@@ -175,7 +201,10 @@ def go_to_next_page(page: Page, pagination: dict[str, Any]) -> bool:
     """一覧の「次へ」を押す。押せなければ False。"""
     if pagination.get("mode") != "next_button":
         return False
-    locator = page.locator(pagination["next_selector"]).first
+    next_selector = configured(pagination.get("next_selector"))
+    if not next_selector:
+        return False
+    locator = page.locator(next_selector).first
     if locator.count() == 0 or not locator.is_visible() or not locator.is_enabled():
         return False
     if "disabled" in (locator.get_attribute("class") or ""):
@@ -199,19 +228,20 @@ def do_form_login(page: Page, config: dict[str, Any]) -> None:
             "同じフォルダに .env を置くか、シェルで export してください。\n"
             "（2要素認証などでフォームログインできない場合は login --manual を使ってください）"
         )
-    goto(page, config, login["url"])
-    page.fill(login["user_selector"], user)
-    page.fill(login["password_selector"], password)
-    page.click(login["submit_selector"])
-    if login.get("success_selector"):
-        page.wait_for_selector(login["success_selector"])
+    goto(page, config, need(login, "url", "login.url"))
+    page.fill(need(login, "user_selector", "login.user_selector"), user)
+    page.fill(need(login, "password_selector", "login.password_selector"), password)
+    page.click(need(login, "submit_selector", "login.submit_selector"))
+    success_selector = configured(login.get("success_selector"))
+    if success_selector:
+        page.wait_for_selector(success_selector)
     else:
         page.wait_for_load_state("networkidle")
     print("ログインしました。")
 
 
 def do_manual_login(page: Page, config: dict[str, Any]) -> None:
-    goto(page, config, config["login"]["url"])
+    goto(page, config, need(config["login"], "url", "login.url"))
     print()
     print("ブラウザが開きました。手でログインを完了させてください。")
     print("ログイン後の画面が表示されたら、このターミナルで Enter を押してください。")
@@ -239,9 +269,11 @@ def collect_offices(page: Page, config: dict[str, Any]) -> list[Office]:
             for e in entries
         ]
 
-    goto(page, config, offices_cfg["list_url"], offices_cfg.get("ready_selector"))
+    list_url = need(offices_cfg, "list_url", "offices.list_url")
+    row_selector = need(offices_cfg, "row_selector", "offices.row_selector")
+    goto(page, config, list_url, offices_cfg.get("ready_selector"))
     offices: list[Office] = []
-    for link in page.locator(offices_cfg["row_selector"]).all():
+    for link in page.locator(row_selector).all():
         href = link.get_attribute("href") or ""
         offices.append(
             Office(
@@ -270,7 +302,10 @@ def filter_offices(offices: list[Office], only: list[str]) -> list[Office]:
 def collect_users(page: Page, config: dict[str, Any], office: Office) -> tuple[list[RinUser], str]:
     """利用者一覧を取得し、(利用者リスト, 一覧ページのHTML) を返す。"""
     users_cfg = config["users"]
-    list_url = office.url or users_cfg["list_url_template"].format(office_id=office.office_id)
+    list_url = office.url or need(
+        users_cfg, "list_url_template", "users.list_url_template"
+    ).format(office_id=office.office_id)
+    row_selector = need(users_cfg, "row_selector", "users.row_selector")
     goto(page, config, list_url, users_cfg.get("ready_selector"))
 
     pagination = users_cfg.get("pagination", {}) or {}
@@ -282,12 +317,12 @@ def collect_users(page: Page, config: dict[str, Any], office: Office) -> tuple[l
     first_page_html = page.content()
 
     for _ in range(max_pages):
-        for row in page.locator(users_cfg["row_selector"]).all():
-            name_selector = users_cfg.get("name_selector")
+        for row in page.locator(row_selector).all():
+            name_selector = configured(users_cfg.get("name_selector"))
             name = text_of(row.locator(name_selector).first) if name_selector else text_of(row)
             if not name:
                 continue
-            link = row.locator(users_cfg.get("link_selector", "a")).first
+            link = row.locator(configured(users_cfg.get("link_selector")) or "a").first
             href = link.get_attribute("href") or "" if link.count() else ""
             user_id = extract_id(href, users_cfg.get("id_pattern"))
             key = user_id or f"{name}|{href}"
@@ -298,8 +333,9 @@ def collect_users(page: Page, config: dict[str, Any], office: Office) -> tuple[l
 
         if not go_to_next_page(page, pagination):
             break
-        if users_cfg.get("ready_selector"):
-            page.wait_for_selector(users_cfg["ready_selector"])
+        list_ready = configured(users_cfg.get("ready_selector"))
+        if list_ready:
+            page.wait_for_selector(list_ready)
         time.sleep(wait_ms / 1000)
 
     return users, first_page_html
@@ -311,10 +347,10 @@ def collect_users(page: Page, config: dict[str, Any], office: Office) -> tuple[l
 def open_record_page(page: Page, config: dict[str, Any], user: RinUser, year: int, month: int) -> None:
     """指定した利用者・年月の提供実績記録表を表示する。"""
     record_cfg = config["record"]
-    ready = record_cfg.get("ready_selector")
+    ready = configured(record_cfg.get("ready_selector"))
 
     if record_cfg.get("mode", "url") == "url":
-        url = record_cfg["url_template"].format(
+        url = need(record_cfg, "url_template", "record.url_template").format(
             user_id=user.user_id,
             year=year,
             month=month,
@@ -326,25 +362,32 @@ def open_record_page(page: Page, config: dict[str, Any], user: RinUser, year: in
 
     # 画面をクリックしてたどる方式。
     ui = record_cfg.get("ui", {}) or {}
-    detail_url = user.url or ui["user_detail_url_template"].format(user_id=user.user_id)
+    detail_url = user.url or need(
+        ui, "user_detail_url_template", "record.ui.user_detail_url_template"
+    ).format(user_id=user.user_id)
     goto(page, config, detail_url)
 
-    page.click(ui["performance_tab_selector"])
-    if ui.get("performance_ready_selector"):
-        page.wait_for_selector(ui["performance_ready_selector"])
+    page.click(need(ui, "performance_tab_selector", "record.ui.performance_tab_selector"))
+    performance_ready = configured(ui.get("performance_ready_selector"))
+    if performance_ready:
+        page.wait_for_selector(performance_ready)
 
-    page.click(ui["record_link_selector"])
+    page.click(need(ui, "record_link_selector", "record.ui.record_link_selector"))
     if ready:
         page.wait_for_selector(ready)
 
-    # 年月を切り替える。
-    if ui.get("year_select"):
-        page.select_option(ui["year_select"], str(year))
-    if ui.get("month_select"):
+    # 年月を切り替える。プルダウンや「表示」ボタンが無い画面もあるので、
+    # 埋まっている項目だけを操作する。
+    year_select = configured(ui.get("year_select"))
+    if year_select:
+        page.select_option(year_select, str(year))
+    month_select = configured(ui.get("month_select"))
+    if month_select:
         month_value = f"{month:02d}" if ui.get("month_zero_pad") else str(month)
-        page.select_option(ui["month_select"], month_value)
-    if ui.get("apply_selector"):
-        page.click(ui["apply_selector"])
+        page.select_option(month_select, month_value)
+    apply_selector = configured(ui.get("apply_selector"))
+    if apply_selector:
+        page.click(apply_selector)
         if ready:
             page.wait_for_selector(ready)
     page.wait_for_load_state("domcontentloaded")
@@ -408,7 +451,12 @@ def cmd_login(args, config) -> int:
 
 
 def cmd_inspect(args, config) -> int:
-    """各段階の画面を HTML で保存する。セレクタを確定させるための調査用。"""
+    """各段階の画面を HTML で保存する。セレクタを確定させるための調査用。
+
+    ★印がまだ埋まっていない段階で実行するコマンドなので、途中でたどれなく
+    なっても止めずに、その時点で開いている画面を保存して次に進む。
+    保存された HTML を見て★を埋め、また実行する、という往復を想定している。
+    """
     out_dir = Path(args.out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
 
@@ -416,27 +464,58 @@ def cmd_inspect(args, config) -> int:
         browser, context = build_context(playwright, args, config)
         page = context.new_page()
         saved: list[str] = []
+        blocked: list[str] = []
+
+        def snapshot(filename: str, html: str | None = None) -> None:
+            content = page.content() if html is None else html
+            (out_dir / filename).write_text(content, encoding="utf-8")
+            saved.append(filename)
+
+        def blocked_here(stage: str, exc: Exception) -> None:
+            blocked.append(f"{stage}: {exc}")
+            print(f"  {stage}をたどれませんでした: {exc}", file=sys.stderr)
+
         try:
             if not Path(args.state).exists():
                 ensure_logged_in(page, config, args.manual)
 
-            offices = collect_offices(page, config)
-            print(f"事業所: {', '.join(o.name for o in offices) or '（取得できず）'}")
-            (out_dir / "01_事業所一覧.html").write_text(page.content(), encoding="utf-8")
-            saved.append("01_事業所一覧.html")
+            # ログイン直後の画面。事業所一覧や利用者一覧への入口を探す手がかりになる。
+            goto(page, config, configured(config.get("home_url")) or config["login"]["url"])
+            snapshot("00_ログイン直後.html")
 
+            offices: list[Office] = []
+            try:
+                offices = collect_offices(page, config)
+                print(f"事業所: {', '.join(o.name for o in offices) or '（0件）'}")
+            except Exception as exc:
+                blocked_here("事業所一覧", exc)
+            snapshot("01_事業所一覧.html")
+
+            users: list[RinUser] = []
             if offices:
-                users, users_html = collect_users(page, config, offices[0])
-                (out_dir / "02_利用者一覧.html").write_text(users_html, encoding="utf-8")
-                saved.append("02_利用者一覧.html")
-                print(f"利用者: {len(users)}名（先頭: {users[0].name if users else '取得できず'}）")
+                try:
+                    users, users_html = collect_users(page, config, offices[0])
+                    print(f"利用者: {len(users)}名（先頭: {users[0].name if users else '0件'}）")
+                    snapshot("02_利用者一覧.html", users_html)
+                except Exception as exc:
+                    blocked_here("利用者一覧", exc)
+                    snapshot("02_利用者一覧.html")
+            else:
+                blocked_here("利用者一覧", Exception("事業所を1件も取得できなかったため進めません"))
+                snapshot("02_利用者一覧.html")
 
-                if users:
-                    today = date.today()
+            if users:
+                today = date.today()
+                try:
                     open_record_page(page, config, users[0], today.year, today.month)
-                    (out_dir / "03_提供実績記録表.html").write_text(page.content(), encoding="utf-8")
+                except Exception as exc:
+                    blocked_here("提供実績記録表", exc)
+                snapshot("03_提供実績記録表.html")
+                try:
                     page.screenshot(path=str(out_dir / "03_提供実績記録表.png"), full_page=True)
-                    saved.extend(["03_提供実績記録表.html", "03_提供実績記録表.png"])
+                    saved.append("03_提供実績記録表.png")
+                except Exception as exc:
+                    print(f"  スクリーンショットを保存できませんでした: {exc}", file=sys.stderr)
         finally:
             browser.close()
 
@@ -444,6 +523,13 @@ def cmd_inspect(args, config) -> int:
     print(f"保存先: {out_dir}")
     for name in saved:
         print(f"  - {name}")
+    if blocked:
+        print()
+        print("まだたどれていない段階:")
+        for message in blocked:
+            print(f"  - {message}")
+        print()
+        print("保存された HTML を見て config.json の★を埋め、もう一度 inspect を実行してください。")
     print()
     print("※利用者の氏名など個人情報が含まれます。共有する前に必ず中身を確認してください。")
     return 0
@@ -581,7 +667,11 @@ def main(argv: list[str] | None = None) -> int:
         load_dotenv(HERE.parent.parent / ".env")
 
     config = load_config(Path(args.config))
-    return {"login": cmd_login, "inspect": cmd_inspect, "run": cmd_run}[args.command](args, config)
+    try:
+        return {"login": cmd_login, "inspect": cmd_inspect, "run": cmd_run}[args.command](args, config)
+    except NotConfigured as exc:
+        die(str(exc))
+        return 1
 
 
 if __name__ == "__main__":

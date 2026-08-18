@@ -1,0 +1,57 @@
+{
+  "base_url": "http://127.0.0.1:8799",
+  "timeout_ms": 15000,
+  "_memo": "★を埋める前の状態。inspect がここから画面を保存できることを確かめるための設定。",
+  "home_url": "/offices",
+  "login": {
+    "url": "/login",
+    "user_selector": "#userId",
+    "password_selector": "#password",
+    "submit_selector": "#loginButton",
+    "success_selector": "#officeTable"
+  },
+  "offices": {
+    "mode": "links",
+    "list_url": "★事業所一覧のURL",
+    "ready_selector": "★事業所一覧の目印になる要素",
+    "row_selector": "★事業所名のリンク",
+    "id_pattern": "officeId=(\\d+)",
+    "only": []
+  },
+  "users": {
+    "list_url_template": "★利用者一覧のURL",
+    "ready_selector": "★利用者一覧の目印になる要素",
+    "row_selector": "★利用者1名分の行",
+    "name_selector": "★行の中の利用者名",
+    "link_selector": "★行の中の詳細へのリンク",
+    "id_pattern": "userId=(\\d+)",
+    "pagination": {
+      "mode": "none",
+      "next_selector": "★「次へ」のリンク",
+      "max_pages": 100,
+      "wait_ms": 500
+    }
+  },
+  "record": {
+    "mode": "ui",
+    "ready_selector": "★提供実績記録表の目印になる要素",
+    "ui": {
+      "user_detail_url_template": "★利用者詳細のURL",
+      "performance_tab_selector": "★「提供実績」タブ",
+      "performance_ready_selector": "★提供実績タブの表示完了の目印",
+      "record_link_selector": "★「提供実績記録表」を開くリンク",
+      "year_select": "★年のプルダウン",
+      "month_select": "★月のプルダウン",
+      "month_zero_pad": false,
+      "apply_selector": "★「表示」ボタン"
+    }
+  },
+  "output": {
+    "dir": "out",
+    "months": [
+      "2026-01"
+    ],
+    "wait_ms": 30,
+    "inject_base_href": true
+  }
+}
