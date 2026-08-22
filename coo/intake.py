@@ -123,7 +123,13 @@ def load_documents() -> list[dict]:
 
 
 def requirement_status(files: list[dict] | None = None) -> list[dict]:
-    """必要資料チェックリストに対して、提供済み / 未提供を判定する。"""
+    """必要資料チェックリストに対して、提供済み / 未提供を判定する。
+
+    判定は2経路。
+    - ローカル: data/inbox のファイル名が match パターンに合致すれば提供済み
+    - Drive:    設定の provided: true をそのまま提供済みとして扱う
+                （Drive上の資料はローカルに無いため、台帳側で状態を持つ）
+    """
     files = scan_inbox() if files is None else files
     results = []
     for req in data_requirements():
@@ -133,6 +139,7 @@ def requirement_status(files: list[dict] | None = None) -> list[dict]:
             for f in files
             if any(fnmatch.fnmatch(f["path"].lower(), p.lower()) for p in patterns)
         ]
+        declared = bool(req.get("provided", False))
         results.append(
             {
                 "id": req.get("id"),
@@ -143,8 +150,10 @@ def requirement_status(files: list[dict] | None = None) -> list[dict]:
                 "format": req.get("format", ""),
                 "cadence": req.get("cadence", ""),
                 "how_to_export": req.get("how_to_export", ""),
-                "satisfied": bool(matched),
-                "matched_files": matched,
+                "drive": req.get("drive", ""),
+                "satisfied": bool(matched) or declared,
+                "source": "drive" if declared and not matched else "inbox",
+                "matched_files": matched or ([req["drive"]] if declared and req.get("drive") else []),
             }
         )
     return results

@@ -166,7 +166,7 @@ function renderDataNeeds(report, inbox) {
       <div class="db-req-body">
         <div class="db-req-title">${esc(r.title)}<span class="db-pill pill-${r.priority === "A" ? "red" : r.priority === "B" ? "yellow" : "gray"}" style="margin-left:8px">${esc(r.priority)}</span></div>
         <div class="db-req-why">${esc(r.why)}</div>
-        <div class="db-req-how">${esc(r.format)}　→　<code>data/inbox/${esc(r.category)}/</code>　（${esc(r.cadence)}）<br>取り出し方: ${esc(r.how_to_export)}</div>
+        <div class="db-req-how">${esc(r.format)}　→　<code>${esc(r.drive || `data/inbox/${r.category}/`)}</code>　（${esc(r.cadence)}）<br>取り出し方: ${esc(r.how_to_export)}</div>
         ${r.satisfied ? `<div class="db-req-how">受領済み: ${r.matched_files.map((f) => `<code>${esc(f)}</code>`).join(" ")}</div>` : ""}
       </div>
     </div>`).join("");

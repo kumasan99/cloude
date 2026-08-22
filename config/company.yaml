@@ -1,27 +1,62 @@
 # 会社の前提情報。クロ（COO）が毎回のレポートで参照します。
-# 空欄のままでも動きますが、埋めるほど報告の精度が上がります。
 company:
-  name: ""                # 例: 株式会社リソウ
-  business: ""            # 例: 中小企業向けの業務システム受託開発
-  founded: ""             # 例: 2018
-  fiscal_year_end: ""     # 例: 3月
-  employees: 0            # 正社員数
-  contractors: 0          # 業務委託・パート等
+  name: "ReSowホールディングス株式会社（グループ5社）"
+  business: "障害福祉サービス（就労継続支援B型・放課後等デイ・グループホーム・訪問看護・相談支援）およびFC本部"
+  group:
+    - name: "株式会社ワンダー"
+      role: "主力事業会社。WonderFriends / WonderKEA（就労継続支援B型）"
+      fiscal_year_end: "12月"
+    - name: "株式会社ReSowパートナーズ"
+      role: "就労事業（KS直営）・Emit・ギルド・COCOna・COCOto。R7.12にLifeQuestを吸収合併"
+      fiscal_year_end: "6月"
+    - name: "株式会社COCO"
+      role: "COCOde（グループホーム）"
+      fiscal_year_end: "3月"
+    - name: "ReSowホールディングス株式会社"
+      role: "持株会社"
+      fiscal_year_end: "3月"
+    - name: "LifeQuest株式会社"
+      role: "FC本部（R7.12 パートナーズへ吸収合併済・実績参照のみ）"
+      fiscal_year_end: "3月"
+  brands:
+    ["WonderFriends", "WonderKEA", "COCOde", "COCOto", "COCOna",
+     "ワンダーギルド", "Emit", "FCロイヤリティ", "就労事業"]
+  note: "決算期が法人ごとに異なるため、5社合算は単純合算（連結消去なし）。比較時は必ずその旨を明記すること。"
 
 ceo:
-  name: ""
-  # CEOが今いちばん気にしていること。ここを書き換えると報告の切り口が変わります。
+  name: "熊野"
+  # CEOが今いちばん気にしていること。ここが報告の切り口を決めます。
   priorities:
-    - "資金繰りを止めないこと"
-    - "利益率の改善"
-    - "属人化の解消"
-  # 「これは自分が決める」と決めている領域（=decisions に上げてほしいもの）
+    - "資金繰りを止めないこと（最優先）"
+    - "成長が利益と現金に変換されていない構造の解明"
+    - "IPO準備に耐えうる財務体質への転換"
+    - "運営指導・コンプライアンス上の重大リスクの早期検知"
+    - "属人化の解消と、数字が自動で回る体制づくり"
+  # 「これは自分が決める」と決めている領域（= decisions に上げるもの）
   decision_scope:
-    - "100万円以上の支出"
-    - "採用・解雇"
-    - "新規事業・撤退"
-    - "主要顧客との条件変更"
+    - "資金調達・借入・返済条件の変更"
+    - "1,000万円以上の支出、および予算外の支出"
+    - "組織再編・法人間の資本移動"
+    - "M&A・新規出店・事業撤退"
+    - "IPO準備の進め方と外部専門家の起用"
+    - "幹部人事、および運営指導・行政対応の方針"
+    - "対外発表の内容とスタンス"
 
 reporting:
-  cadence: "weekly"        # weekly / monthly
-  tone: "率直に。悪い数字ほど先に。"
+  cadence: "weekly"
+  tone: "率直に。悪い数字ほど先に。事実と推測を必ず分ける。"
+  # 読まない資料（社長の指定。フォルダIDで固定）
+  excluded_sources:
+    - id: "1Jhq0dgJFrD3JKZ8IXYdiVRIztCaZuqyq"
+      name: "01_data/hr/30_健康情報"
+      reason: "要配慮個人情報"
+    - id: "1IbOzditKSK15HAgM-fQg5KP0EyYcvgor"
+      name: "01_data/private"
+      reason: "個人資産・非共有"
+    - id: "1BlY7zkzYBBzJA6CadDZkLYLkfwHpTvCu"
+      name: "支援記録PJ"
+      reason: "利用者の支援記録・要配慮個人情報"
+  restricted_sources:
+    - id: "1kli-XUe2z3gJ_DkJu-kfH4izBPdyR4Wm"
+      name: "01_data/hr/20_給与"
+      rule: "個人別データは参照しない。法人別・月別の集計値（人数・給与総額・法定福利費）のみ扱う。"
