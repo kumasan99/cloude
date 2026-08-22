@@ -12,3 +12,5 @@ data/archive/*
 !data/archive/.gitkeep
 reports/*.json
 !reports/sample/*.json
+# 現用DriveファイルIDの台帳はローカル限定
+config/local_sources.yaml

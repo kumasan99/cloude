@@ -60,3 +60,12 @@ reporting:
     - id: "1kli-XUe2z3gJ_DkJu-kfH4izBPdyR4Wm"
       name: "01_data/hr/20_給与"
       rule: "個人別データは参照しない。法人別・月別の集計値（人数・給与総額・法定福利費）のみ扱う。"
+  # Plaud録音（会議音声）の参照ルール（案・CEO承認待ち）
+  audio_sources:
+    rule: |
+      経営会議・取締役会・コア会議・資金調達関連の録音は参照可。
+      個人の人事・経費・処遇に関する録音は、CEOの明示指示があるときのみ参照する。
+  # 現用データ（資金繰り表・事業所別売上・議事録3本など）の実ファイルIDは
+  # Git管理外の config/local_sources.yaml に記録する（.gitignore 済み）。
+  # 恒久的には ReSow_00_MAP_v2 への登録が正（imp-104 参照）。
+  live_sources_file: "config/local_sources.yaml"

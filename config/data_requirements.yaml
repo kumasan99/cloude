@@ -11,9 +11,9 @@ requirements:
   - id: cashflow_current
     title: 資金繰り表（2026年3月以降の実績）
     category: finance
-    drive: "01_data/finance/ReSow_資金繰り表_2026.xlsx"
+    drive: "資金繰り表（現用スプレッドシート 1kFOKdvgMBLIKPhGFVQm…）※MAP未登録"
     priority: A
-    provided: false
+    provided: true
     why: "最終更新が2026年5月18日、中身は2月W3時点。会社の現在地が分からない最大の原因。他のどの資料より優先。"
     format: "Excel（既存ファイルの3月以降を埋める）。難しければ各口座の月末残高メモでも可"
     cadence: "隔週（第1週・第3週）※ファイル内に設計済み"
@@ -59,9 +59,9 @@ requirements:
   - id: monthly_sales_current
     title: 月次売上（2026年3月以降）
     category: operations
-    drive: "01_data/operations/ReSow_全事業月次売上_v1.xlsx"
+    drive: "事業所別売上（現用スプレッドシート 1rp9jYwCu0iNMTdMMFNL…）※MAP未登録"
     priority: A
-    provided: false
+    provided: true
     why: "2018年度から積み上がった良質なデータだが26年2月で停止。事業所別の異常検知が半年遅れになる。"
     format: "既存ファイルへの行追記（1事業所1行の転記、全社30分程度）"
     cadence: "毎月（国保連請求確定後）"
@@ -84,10 +84,10 @@ requirements:
   - id: meeting_minutes
     title: 経営会議の議事録
     category: docs
-    drive: "02_docs/議事録/"
+    drive: "議事録3本（役員会/取締役会/コア会議・Googleドキュメント）※MAP未登録。音声はPlaud"
     priority: B
-    provided: false
-    why: "フォルダが空。数字に出る前の兆候（現場の不満、止まっている案件、顧客の不穏な指摘）はここにしか現れない。"
+    provided: true
+    why: "現用の議事録3本を受領済み（8/20分まで）。02_docs/議事録フォルダは空のままなので、現用ドキュメントのMAP登録が必要。"
     format: "テキスト / Markdown / Word / PDF。録音の文字起こしそのままで可"
     cadence: "毎週"
     how_to_export: "直近3回分を形式を問わず配置"
@@ -169,7 +169,7 @@ requirements:
   - id: sales_history
     title: 月次売上の履歴（2018年度〜2026年2月）
     category: operations
-    drive: "01_data/operations/ReSow_全事業月次売上_v1.xlsx"
+    drive: "事業所別売上（現用スプレッドシート 1rp9jYwCu0iNMTdMMFNL…）※MAP未登録"
     priority: A
     provided: true
     why: "事業所別・ブランド別の月次推移。8年分の資産。ただし26年3月以降は未更新（monthly_sales_current 参照）。"
