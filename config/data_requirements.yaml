@@ -23,9 +23,9 @@ requirements:
   - id: monthly_trial_balance
     title: 月次試算表（法人別・直近12ヶ月）
     category: finance
-    drive: "01_data/finance/（未作成）"
+    drive: "マネーフォワード クラウド会計MCP（ワンダーのみ接続済み・記帳は約2ヶ月遅れ）"
     priority: A
-    provided: false
+    provided: true
     why: "年次決算と資金繰り表の間に月次損益が完全に抜けている。「今月儲かっているか」が判断できない。"
     format: "Excel / CSV（会計ソフトの月次推移表そのままで可）"
     cadence: "毎月（月次締め後）"
