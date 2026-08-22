@@ -17,7 +17,7 @@ requirements:
     why: "最終更新が2026年5月18日、中身は2月W3時点。会社の現在地が分からない最大の原因。他のどの資料より優先。"
     format: "Excel（既存ファイルの3月以降を埋める）。難しければ各口座の月末残高メモでも可"
     cadence: "隔週（第1週・第3週）※ファイル内に設計済み"
-    how_to_export: "既存の資金繰り表を更新。または通帳・ネットバンキングの残高推移"
+    how_to_export: "既存の資金繰り表を更新。MFクラウド会計のMCP接続後は入出金明細・残高からクロが下書きを自動生成可能"
     match: ["finance/*資金繰*", "finance/*cash*"]
 
   - id: monthly_trial_balance
@@ -29,7 +29,7 @@ requirements:
     why: "年次決算と資金繰り表の間に月次損益が完全に抜けている。「今月儲かっているか」が判断できない。"
     format: "Excel / CSV（会計ソフトの月次推移表そのままで可）"
     cadence: "毎月（月次締め後）"
-    how_to_export: "会計ソフト → レポート → 月次推移表 → 法人ごとに12ヶ月分をエクスポート"
+    how_to_export: "推奨：マネーフォワード クラウド会計の公式MCPサーバーを接続すればクロが直接取得可能（残高試算表・推移表・仕訳）。未接続の間は会計ソフトから月次推移表をエクスポート"
     match: ["finance/*試算表*", "finance/*月次推移*", "finance/*trial*"]
 
   - id: nonoperating_detail
