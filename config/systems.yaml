@@ -60,3 +60,22 @@ systems:
     status: none
     via: 未連携
     note: 議事録で「継続について協議」中。継続判断が出たら役割と連携要否を確認
+
+  - name: Chatwork
+    role: 社内・社外コミュニケーション
+    status: none
+    via: 未連携。運営元kubellの公式MCPサーバーあり（ローカル実行型 @chatwork/mcp-server）
+    note: >
+      公式MCPはローカル型のため、リモートのクロから直結するには
+      APIトークンでの接続確認が必要（次の作業候補）。
+      社長のデスクトップ版Claude（Cowork）からは公式MCPで即接続可能。
+      読む範囲のルール（どのルームを対象にするか）は接続前にCEOと決める。
+
+  - name: LINE WORKS
+    role: 社内・現場コミュニケーション
+    status: none
+    via: 未連携。公式MCPなし（LINE Bot MCPは別製品・LINE公式アカウント用）
+    note: >
+      公式APIはあるため連携開発は可能だが、サードパーティ（CData等・有償）か
+      自前開発が必要。優先度はChatworkの後。
+      現場の兆候検知（苦情・ヒヤリハット・退職予兆）の情報源として価値は高い。
