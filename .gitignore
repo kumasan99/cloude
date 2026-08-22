@@ -2,3 +2,13 @@
 __pycache__/
 *.pyc
 .venv/
+
+# --- 社内データはコミットしない ---
+# data/inbox に置いた実資料、生成されたレポート、決裁ログはすべてローカル限定。
+data/inbox/*/*
+!data/inbox/*/.gitkeep
+data/inbox/*.*
+data/archive/*
+!data/archive/.gitkeep
+reports/*.json
+!reports/sample/*.json

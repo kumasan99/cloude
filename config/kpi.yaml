@@ -1,0 +1,66 @@
+# CEOがダッシュボードで見たいKPIの定義。
+# target は未設定でも可（クロが「未設定」と報告します）。
+# direction: up_is_good / down_is_good
+kpis:
+  - id: revenue_monthly
+    label: 月次売上
+    unit: 円
+    target: ""
+    direction: up_is_good
+    source_hint: "finance/ の試算表または売上明細"
+
+  - id: gross_margin
+    label: 粗利率
+    unit: "%"
+    target: ""
+    direction: up_is_good
+    source_hint: "finance/ の試算表"
+
+  - id: operating_profit
+    label: 営業利益
+    unit: 円
+    target: ""
+    direction: up_is_good
+    source_hint: "finance/ の試算表"
+
+  - id: cash_balance
+    label: 現預金残高
+    unit: 円
+    target: ""
+    direction: up_is_good
+    source_hint: "finance/ の資金繰り表または残高推移"
+
+  - id: cash_runway
+    label: 資金余力（何ヶ月分）
+    unit: ヶ月
+    target: "6"
+    direction: up_is_good
+    source_hint: "現預金残高 ÷ 月次固定費"
+
+  - id: pipeline_amount
+    label: 商談パイプライン総額
+    unit: 円
+    target: ""
+    direction: up_is_good
+    source_hint: "sales/ の案件一覧"
+
+  - id: order_backlog
+    label: 受注残
+    unit: 円
+    target: ""
+    direction: up_is_good
+    source_hint: "sales/ の受注一覧"
+
+  - id: labor_cost_ratio
+    label: 人件費率
+    unit: "%"
+    target: ""
+    direction: down_is_good
+    source_hint: "finance/ の試算表 と people/ の人員名簿"
+
+  - id: utilization
+    label: 稼働率
+    unit: "%"
+    target: ""
+    direction: up_is_good
+    source_hint: "people/ の工数記録"

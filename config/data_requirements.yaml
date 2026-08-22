@@ -1,0 +1,164 @@
+# クロ（COO）が経営判断材料を組み立てるために必要とする資料のチェックリスト。
+# ダッシュボードの「クロが待っている資料」パネルはこの定義を見て
+# 提供済み / 未提供 を自動判定します。
+#
+# priority:
+#   A = これが無いと経営判断ができない（最優先）
+#   B = 判断の精度が大きく上がる
+#   C = 余力があれば
+#
+# match: data/inbox からの相対パスに対する glob パターン（大文字小文字は無視）
+
+requirements:
+  # ---------- 優先度A ----------
+  - id: trial_balance
+    title: 月次試算表（直近12ヶ月）
+    category: finance
+    priority: A
+    why: "売上・粗利・固定費・営業利益の実額と推移。これが無いと損益の話が一切できません。"
+    format: "Excel または CSV（会計ソフトからの出力そのままで可）"
+    cadence: "毎月（月次締め後）"
+    how_to_export: "freee / マネーフォワード / 弥生 → レポート → 試算表 → 期間を12ヶ月にしてエクスポート"
+    match: ["finance/*試算表*", "finance/*trial*balance*", "finance/*月次推移*", "finance/*pl*"]
+
+  - id: cashflow
+    title: 資金繰り表 または 預金残高推移
+    category: finance
+    priority: A
+    why: "会社が止まるのは赤字のときではなく現金が尽きたとき。資金余力（何ヶ月もつか）の算出に必須です。"
+    format: "Excel / CSV。無ければ各口座の月末残高を並べたメモでも可"
+    cadence: "毎月"
+    how_to_export: "会計ソフトの資金繰りレポート、または通帳・ネットバンキングの残高推移CSV"
+    match: ["finance/*資金繰*", "finance/*cash*", "finance/*残高*", "finance/*balance*"]
+
+  - id: sales_detail
+    title: 売上明細（顧客別・月別）
+    category: finance
+    priority: A
+    why: "売上の中身が分からないと「どの顧客に依存しているか」「どこが伸びているか」が判断できません。"
+    format: "CSV / Excel（顧客名・年月・金額の3列があれば十分）"
+    cadence: "毎月"
+    how_to_export: "会計ソフトの得意先元帳、または請求管理ツールの請求一覧をエクスポート"
+    match: ["finance/*売上*", "sales/*売上*", "finance/*sales*", "finance/*得意先*"]
+
+  - id: pipeline
+    title: 案件パイプライン（商談中の一覧）
+    category: sales
+    priority: A
+    why: "来月以降の売上見通し。今の受注残と商談額が分かって初めて、採用や投資の判断ができます。"
+    format: "CSV / Excel / スプレッドシート出力（案件名・顧客・金額・確度・受注予定月）"
+    cadence: "毎週"
+    how_to_export: "CRM・営業管理シートをCSVで書き出し。無ければ手書きの一覧でも構いません"
+    match: ["sales/*案件*", "sales/*商談*", "sales/*pipeline*", "sales/*見込*"]
+
+  - id: headcount
+    title: 人員名簿と人件費
+    category: people
+    priority: A
+    why: "人件費は中小企業の最大の固定費。何人で回していて、いくらかかっているかが全ての前提です。"
+    format: "Excel / CSV（氏名は伏せて役割・雇用形態・月額人件費でも可）"
+    cadence: "変動があったとき"
+    how_to_export: "給与計算ソフトの支給一覧、または人員表を手作成"
+    match: ["people/*人員*", "people/*名簿*", "people/*人件費*", "people/*給与*", "people/*headcount*"]
+
+  - id: plan_budget
+    title: 事業計画 または 年度予算
+    category: strategy
+    priority: A
+    why: "「予定に対してどうか」を判断する基準。これが無いと実績を良い/悪いと評価できません。"
+    format: "Excel / PDF / Word。作っていなければ「未作成」とだけ伝えてください"
+    cadence: "年1回（見直し時）"
+    how_to_export: "既存の事業計画書、融資申請時の資料など"
+    match: ["strategy/*計画*", "strategy/*予算*", "strategy/*plan*", "strategy/*budget*"]
+
+  # ---------- 優先度B ----------
+  - id: expenses
+    title: 経費明細（勘定科目別）
+    category: finance
+    priority: B
+    why: "コスト削減の打ち手を出すには、どこに何がかかっているかの内訳が必要です。"
+    format: "CSV / Excel"
+    cadence: "毎月"
+    how_to_export: "会計ソフト → 総勘定元帳 または 科目別集計をエクスポート"
+    match: ["finance/*経費*", "finance/*expense*", "finance/*元帳*", "finance/*科目*"]
+
+  - id: loans
+    title: 借入金一覧・返済予定表
+    category: finance
+    priority: B
+    why: "毎月の返済額は資金繰りの固定的な流出。追加投資の余力判断に直結します。"
+    format: "PDF / Excel（金融機関の返済予定表そのままで可）"
+    cadence: "変動があったとき"
+    how_to_export: "各金融機関から受領した返済予定表"
+    match: ["finance/*借入*", "finance/*返済*", "finance/*loan*"]
+
+  - id: project_profit
+    title: プロジェクト別採算・稼働工数
+    category: people
+    priority: B
+    why: "「忙しいのに儲からない」の原因はほぼここ。赤字案件の特定に使います。"
+    format: "CSV / Excel（案件・担当・投入時間・売上）"
+    cadence: "毎月"
+    how_to_export: "工数管理ツール、勤怠システム、またはスプレッドシート"
+    match: ["people/*工数*", "people/*稼働*", "ops/*工数*", "people/*utilization*"]
+
+  - id: win_loss
+    title: 受注・失注の記録（理由つき）
+    category: sales
+    priority: B
+    why: "失注理由が価格なのか納期なのか体制なのかで、打つべき手が全く変わります。"
+    format: "CSV / Excel / テキストメモ"
+    cadence: "毎月"
+    how_to_export: "営業日報、CRMの商談結果"
+    match: ["sales/*受注*", "sales/*失注*", "sales/*win*", "sales/*loss*"]
+
+  - id: meeting_minutes
+    title: 経営会議・定例の議事録
+    category: ops
+    priority: B
+    why: "数字に出る前の兆候（人の不満、顧客の不穏な発言、止まっている案件）はここにあります。"
+    format: "テキスト / Markdown / Word / PDF。文字起こしそのままで可"
+    cadence: "毎週"
+    how_to_export: "議事録ファイル、または録音の文字起こし"
+    match: ["ops/*議事録*", "ops/*会議*", "ops/*minutes*", "ops/*定例*"]
+
+  - id: hiring
+    title: 採用・離職の状況
+    category: people
+    priority: B
+    why: "採用の遅れと離職は、数ヶ月遅れで売上に効いてきます。早期に判断が要る領域です。"
+    format: "テキスト / Excel"
+    cadence: "毎月"
+    how_to_export: "採用管理ツールの一覧、または現状メモ"
+    match: ["people/*採用*", "people/*離職*", "people/*hiring*", "people/*退職*"]
+
+  # ---------- 優先度C ----------
+  - id: contracts
+    title: 契約一覧（更新期日つき）
+    category: ops
+    priority: C
+    why: "更新漏れ・自動更新による無駄なコスト、そして値上げ交渉のタイミングを逃さないため。"
+    format: "Excel / CSV"
+    cadence: "四半期"
+    how_to_export: "契約管理表。無ければ主要な契約だけの一覧で可"
+    match: ["ops/*契約*", "ops/*contract*"]
+
+  - id: org_chart
+    title: 組織図・役割分担表
+    category: people
+    priority: C
+    why: "属人化の特定と、improvements の owner を正しく指名するために使います。"
+    format: "PDF / 画像 / テキスト"
+    cadence: "変動があったとき"
+    how_to_export: "既存の組織図、または部署と担当のメモ"
+    match: ["people/*組織*", "people/*役割*", "people/*org*"]
+
+  - id: market
+    title: 競合・市場の情報
+    category: strategy
+    priority: C
+    why: "自社の数字だけでは「業界全体が悪いのか、自社が悪いのか」が判別できません。"
+    format: "PDF / テキスト / URLメモ"
+    cadence: "四半期"
+    how_to_export: "業界レポート、competitor の価格表、顧客からのヒアリングメモ"
+    match: ["strategy/*競合*", "strategy/*市場*", "strategy/*market*", "strategy/*competitor*"]
