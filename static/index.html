@@ -26,6 +26,10 @@
         <span class="tab-icon">📋</span>
         事業計画作成
       </button>
+      <button class="tab" data-mode="kodama">
+        <span class="tab-icon">🎙️</span>
+        コダマ（音声記録）
+      </button>
     </nav>
 
     <div class="chat-container" id="chatContainer">
@@ -41,7 +45,14 @@
       </div>
     </div>
 
+    <div class="recording-bar" id="recordingBar" hidden>
+      <span class="recording-dot"></span>
+      <span>録音中... <span id="recordingTime">0:00</span></span>
+      <span class="recording-hint">もう一度マイクボタンを押すと停止します</span>
+    </div>
+
     <div class="input-area">
+      <button id="micBtn" onclick="toggleRecording()" title="音声入力">🎤</button>
       <textarea
         id="messageInput"
         placeholder="経営に関する質問を入力してください..."
