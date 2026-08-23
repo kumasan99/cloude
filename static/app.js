@@ -7,6 +7,14 @@ let conversations = {
   chat: [],
   financial: [],
   plan: [],
+  sebastian: [],
+};
+
+const assistantAvatars = {
+  chat: "🎯",
+  financial: "🎯",
+  plan: "🎯",
+  sebastian: "🤵",
 };
 
 const welcomeMessages = {
@@ -38,6 +46,16 @@ const welcomeMessages = {
       "カフェを開業したいです。事業計画書を一緒に作ってください。",
       "ECサイトの立ち上げを計画しています。計画書の構成を教えてください。",
       "既存事業の拡大計画を作りたいです。何を準備すればいいですか？",
+    ],
+  },
+  sebastian: {
+    icon: "🤵",
+    title: "セバス（執事）モード",
+    desc: "お帰りなさいませ、旦那様。<br>経営のお悩みから日々の雑事まで、何なりとセバスにお申し付けください。",
+    examples: [
+      "セバス、最近少し疲れが溜まっていてね。",
+      "今日の会議がうまくいかなかった。話を聞いてくれないか。",
+      "来週の商談に向けて、心構えを助言してほしい。",
     ],
   },
 };
@@ -95,7 +113,7 @@ function appendMessageToDOM(role, content) {
   const div = document.createElement("div");
   div.className = `message ${role}`;
 
-  const avatar = role === "assistant" ? "🎯" : "👤";
+  const avatar = role === "assistant" ? (assistantAvatars[currentMode] || "🎯") : "👤";
   const rendered = role === "assistant" ? renderMarkdown(content) : escapeHtml(content);
 
   div.innerHTML = `
@@ -131,7 +149,7 @@ function showTyping() {
   div.className = "message assistant";
   div.id = "typingMessage";
   div.innerHTML = `
-    <div class="message-avatar">🎯</div>
+    <div class="message-avatar">${assistantAvatars[currentMode] || "🎯"}</div>
     <div class="message-bubble">
       <div class="typing-indicator">
         <span></span><span></span><span></span>
