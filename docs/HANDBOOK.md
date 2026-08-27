@@ -13,6 +13,7 @@
 | コダマ | 音声記録部（PLAUD議事録・決定事項キュー・語録） | 常駐セッション | session_01XQqcdTcU525Kvhn3r82ZJu・毎晩処理 |
 | アオイ | 健康管理（社外秘・personal限り） | 常駐セッション | session_01V84S7ea282ho2zh5fNsR6p・週次 |
 | マモル | データ品質管理部（8/27新設） | 常駐セッション | session_01Au9htbHAm7QD4yBsFud2mn・毎朝10:00 |
+| メガホ | 広報部（8/27新設・YouTube立て直し） | 常駐セッション | session_01W1zbBNZm6j8oS3ncgnusiW・初回分析8/28 |
 | シルベ | 記録分析部（モーニングレポート） | クロセッションへ発火 | 毎朝8:07（月=ミライ・木=ミミ同梱） |
 | スズ | 秘書室（台帳消込・番台更新） | クロセッションへ発火 | 毎日18:00 |
 | リン | RIN・勤怠収集（Cowork） | Mac夜間ジョブ4:30＋クラウド巡回 | 脱Mac依存プロジェクト進行中(#48) |
@@ -33,7 +34,7 @@
 ## 3. 場所の台帳（フォルダ・ファイルID）
 
 - 00_INBOX（社長ドロップ場所）: `12ibbg4zHeCA9mASLongd7Z85Kny7ba8c` ※時刻フィルタ禁止・全列挙で突合
-- 00_連絡板: _共通 `1otDz0_VqJmbB7izqIfDhocR-I02J1-4_`／リン `1lheMW4H7OucWXk7u8IKzDGAaHkWlpkJG`／バタコ `1foTcCwEynysc8QAppsfzkBBKGOwfY4nB`／ユカ `1KmT9YVYGZQm5pMXobqbvCLqSddzMEIuj`／マモル `1yV3K0Kl_MfFMCXidlS7BSS0VNS_9_wQB`
+- 00_連絡板: _共通 `1otDz0_VqJmbB7izqIfDhocR-I02J1-4_`／リン `1lheMW4H7OucWXk7u8IKzDGAaHkWlpkJG`／バタコ `1foTcCwEynysc8QAppsfzkBBKGOwfY4nB`／ユカ `1KmT9YVYGZQm5pMXobqbvCLqSddzMEIuj`／マモル `1yV3K0Kl_MfFMCXidlS7BSS0VNS_9_wQB`／メガホ `1bhMVcQpVkrZIOq67J2Tn99tc5T0W6c7g`
 - 01_data: `1UB1BM-Xv59weu2vS_tUvRFLjRIkngyi9`（RIN_DB `1zp1DYWdG-aShWxBtgsmqY_ntMmNAefa8`／_品質レポート `1m1MDbTpNNxrKN631e2Y7GBEZwslRss4h`／経費点検DB `19YxnhaestcRfXPEKjvbeiVh-AAQgNMpX`／LINEWORKS_DB受け渡し `1Bl4LwWfGCk88ZXc14PlPgpR0HZqcUbMi`）
 - 会議費・要確認リスト: `1wu5-kkeb0erIZ4Xds4w36xXIZCRQVj52NuyqHSa7jWE`（116行・KPI: 確認結果記入数／領収書リンク数）
 - スタッフ配置（音嶋さん共有済み）: `1FNtD3-c6_4yby7AXsevOSE2C8XhaWyqQ2vAWjdh1OzM`
