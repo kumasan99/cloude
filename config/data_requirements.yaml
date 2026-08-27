@@ -1,0 +1,203 @@
+# クロ（COO）が経営判断材料を組み立てるために必要な資料のチェックリスト。
+# ReSowグループのGoogle Drive構成（ReSow_00_MAP_v2 準拠）に合わせています。
+#
+# priority: A=これが無いと判断できない / B=精度が大きく上がる / C=余力があれば
+# drive:    Drive上の想定配置（MAPのフォルダ名）
+# provided: true = 提供済みで読める / false = 未提供または要更新
+# match:    ローカルの data/inbox/ にミラーした場合のファイル名パターン
+
+requirements:
+  # ---------- 優先度A ----------
+  - id: cashflow_current
+    title: 資金繰り表（2026年3月以降の実績）
+    category: finance
+    drive: "資金繰り表（現用スプレッドシート 1kFOKdvgMBLIKPhGFVQm…）※MAP未登録"
+    priority: A
+    provided: true
+    why: "最終更新が2026年5月18日、中身は2月W3時点。会社の現在地が分からない最大の原因。他のどの資料より優先。"
+    format: "Excel（既存ファイルの3月以降を埋める）。難しければ各口座の月末残高メモでも可"
+    cadence: "隔週（第1週・第3週）※ファイル内に設計済み"
+    how_to_export: "既存の資金繰り表を更新。MFクラウド会計のMCP接続後は入出金明細・残高からクロが下書きを自動生成可能"
+    match: ["finance/*資金繰*", "finance/*cash*"]
+
+  - id: monthly_trial_balance
+    title: 月次試算表（法人別・直近12ヶ月）
+    category: finance
+    drive: "マネーフォワード クラウド会計MCP（ワンダーのみ接続済み・記帳は約2ヶ月遅れ）"
+    priority: A
+    provided: true
+    why: "年次決算と資金繰り表の間に月次損益が完全に抜けている。「今月儲かっているか」が判断できない。"
+    format: "Excel / CSV（会計ソフトの月次推移表そのままで可）"
+    cadence: "毎月（月次締め後）"
+    how_to_export: "推奨：マネーフォワード クラウド会計の公式MCPサーバーを接続すればクロが直接取得可能（残高試算表・推移表・仕訳）。未接続の間は会計ソフトから月次推移表をエクスポート"
+    match: ["finance/*試算表*", "finance/*月次推移*", "finance/*trial*"]
+
+  - id: nonoperating_detail
+    title: 営業外損益の科目別内訳（12期・5社分）
+    category: finance
+    drive: "01_data/finance/決算書/310.決算書類等（原本）"
+    priority: A
+    provided: false
+    why: "営業利益66.5百万と経常利益14.2百万の差52.3百万の正体。来期の利益計画の前提が作れない。"
+    format: "決算書の営業外費用明細ページ（PDF）。該当ページの所在を教えていただくだけでも可"
+    cadence: "年1回（決算後）"
+    how_to_export: "各法人の決算書から該当ページを抽出、または顧問税理士に内訳を依頼"
+    match: ["finance/*営業外*", "finance/*決算書*"]
+
+  - id: loans
+    title: 借入金一覧・返済予定表
+    category: finance
+    drive: "01_data/finance/借入一覧/"
+    priority: A
+    provided: false
+    why: "月次返済8.87百万は資金繰り表からの推定値。金融機関別の残高・金利・期日が不明で、追加調達の余力が判断できない。"
+    format: "PDF / Excel（金融機関の返済予定表そのままで可）"
+    cadence: "変動があったとき"
+    how_to_export: "借入一覧フォルダの中身を確認。無ければ各金融機関の返済予定表"
+    match: ["finance/*借入*", "finance/*返済*"]
+
+  - id: monthly_sales_current
+    title: 月次売上（2026年3月以降）
+    category: operations
+    drive: "事業所別売上（現用スプレッドシート 1rp9jYwCu0iNMTdMMFNL…）※MAP未登録"
+    priority: A
+    provided: true
+    why: "2018年度から積み上がった良質なデータだが26年2月で停止。事業所別の異常検知が半年遅れになる。"
+    format: "既存ファイルへの行追記（1事業所1行の転記、全社30分程度）"
+    cadence: "毎月（国保連請求確定後）"
+    how_to_export: "国保連の請求実績から当月分を追記"
+    match: ["operations/*月次売上*", "sales/*売上*"]
+
+  - id: audit_guidance
+    title: 運営指導（大阪市8拠点）の指摘事項と改善報告期限
+    category: compliance
+    drive: "10_projects/2026-08_運営指導対応_大阪市8拠点"
+    priority: A
+    provided: false
+    why: "報酬返還を伴う指摘かどうかで資金繰りの前提が変わる。期限は現状なし（大阪市が約1ヶ月後に依頼内容を送付予定）。届く前に返還試算を済ませておく。"
+    format: "行政からの通知書（PDF）と改善報告のドラフト"
+    cadence: "案件発生時"
+    how_to_export: "プロジェクトフォルダ内の資料を読める状態にする"
+    match: ["ops/*運営指導*", "ops/*行政*"]
+
+  # ---------- 優先度B ----------
+  - id: meeting_minutes
+    title: 経営会議の議事録
+    category: docs
+    drive: "議事録3本（役員会/取締役会/コア会議・Googleドキュメント）※MAP未登録。音声はPlaud"
+    priority: B
+    provided: true
+    why: "現用の議事録3本を受領済み（8/20分まで）。02_docs/議事録フォルダは空のままなので、現用ドキュメントのMAP登録が必要。"
+    format: "テキスト / Markdown / Word / PDF。録音の文字起こしそのままで可"
+    cadence: "毎週"
+    how_to_export: "直近3回分を形式を問わず配置"
+    match: ["ops/*議事録*", "ops/*会議*"]
+
+  - id: hr_aggregate
+    title: 人員数・人件費の集計値（法人別・月次）
+    category: hr
+    drive: "01_data/hr/00_人事マスタ/"
+    priority: B
+    provided: false
+    why: "資金繰り表の賃金が月37〜46百万と幅があるが、人員数が不明で一人当たり水準を評価できない。人員配置基準の充足も見えない。"
+    format: "「法人・年月・人数・給与総額・法定福利費」の5列のみ。個人名・個人別金額は不要"
+    cadence: "毎月"
+    how_to_export: "給与計算ソフトの支給一覧を法人別・月別に集計したもの"
+    match: ["people/*人件費*", "people/*人員*"]
+
+  - id: users_utilization
+    title: 事業所別の利用者数・稼働率
+    category: operations
+    drive: "01_data/operations/（未作成）"
+    priority: B
+    provided: false
+    why: "売上の増減が利用者数によるものか単価によるものか判別できない。福祉事業で最も重要な指標が欠けている。"
+    format: "月次・事業所別の実人数と延べ利用日数"
+    cadence: "毎月"
+    how_to_export: "国保連の請求データから作成可能"
+    match: ["operations/*利用者*", "operations/*稼働*"]
+
+  - id: outsourcing_breakdown
+    title: 業務委託料の委託先別内訳（ワンダー12期）
+    category: finance
+    drive: "01_data/finance/（未作成）"
+    priority: B
+    provided: false
+    why: "前期ゼロから274.8百万（売上比22.4%）に出現。営業利益50.2百万を上回る規模で、IPO準備では必ず論点になる。"
+    format: "委託先・契約内容・年間金額・従来の計上科目の4列。上位20件で可"
+    cadence: "年1回"
+    how_to_export: "総勘定元帳の業務委託料の補助科目を金額順に出力"
+    match: ["finance/*業務委託*", "finance/*元帳*"]
+
+  - id: payables_partners
+    title: パートナーズの買掛金の相手先別残高と支払サイト
+    category: finance
+    drive: "01_data/finance/（未作成）"
+    priority: B
+    provided: false
+    why: "買掛金が25.1→120.0百万（+377.6%）に膨らみ流動比率が100%割れ。支払繰延で資金を回している可能性の検証。"
+    format: "買掛金補助元帳（上位10社）＋各社の支払条件"
+    cadence: "四半期"
+    how_to_export: "会計ソフトの買掛金補助元帳を残高順に出力"
+    match: ["finance/*買掛*"]
+
+  - id: turnover
+    title: 採用・離職の状況
+    category: hr
+    drive: "01_data/hr/00_人事マスタ/"
+    priority: B
+    provided: false
+    why: "福祉事業は人員配置基準があるため、離職は売上に直結する。数ヶ月遅れで効いてくる領域。"
+    format: "月次の入社・退社人数（法人別・事業所別）。個人名不要"
+    cadence: "毎月"
+    how_to_export: "人事マスタから集計"
+    match: ["people/*採用*", "people/*離職*", "people/*退職*"]
+
+  # ---------- 提供済み ----------
+  - id: financial_statements
+    title: 決算統合（年次・5社合算）
+    category: finance
+    drive: "01_data/master/ReSow_決算統合_v11.xlsx"
+    priority: A
+    provided: true
+    why: "年次の損益・BS・KPIの基準。7期〜12期の推移まで整備済み。"
+    format: "Excel"
+    cadence: "年1回"
+    how_to_export: "既に整備済み。次期決算後に v12 として更新"
+    match: ["finance/*決算統合*"]
+
+  - id: sales_history
+    title: 月次売上の履歴（2018年度〜2026年2月）
+    category: operations
+    drive: "事業所別売上（現用スプレッドシート 1rp9jYwCu0iNMTdMMFNL…）※MAP未登録"
+    priority: A
+    provided: true
+    why: "事業所別・ブランド別の月次推移。8年分の資産。ただし26年3月以降は未更新（monthly_sales_current 参照）。"
+    format: "Excel"
+    cadence: "毎月"
+    how_to_export: "既存ファイル"
+    match: ["operations/*月次売上*"]
+
+  - id: org_master
+    title: 従業員名簿・組織図・法人事業所マスタ
+    category: hr
+    drive: "01_data/hr/00_人事マスタ/、01_data/master/"
+    priority: B
+    provided: true
+    why: "組織構造と拠点の把握。improvements の owner を正しく指名するために使用。"
+    format: "CSV / Excel"
+    cadence: "変動があったとき"
+    how_to_export: "既に整備済み"
+    match: ["people/*名簿*", "people/*組織*"]
+
+  - id: sales_plan
+    title: 月次売上計画
+    category: operations
+    drive: "01_data/operations/ReSow_月次売上計画_v15.xlsx"
+    priority: A
+    provided: true
+    why: "実績を評価するための基準。2026年8月19日更新で鮮度は良好。"
+    format: "Excel"
+    cadence: "随時"
+    how_to_export: "既に整備済み"
+    match: ["operations/*売上計画*", "strategy/*計画*"]

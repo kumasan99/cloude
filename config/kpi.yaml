@@ -1,0 +1,147 @@
+# CEOがダッシュボードで見たいKPI。障害福祉・グループ経営・IPO準備を前提に定義。
+# target は御社の既存の判定基準（決算統合_v11 のKPIサマリ）に合わせています。
+kpis:
+  # --- 資金（最優先） ---
+  - id: cash_balance
+    label: 現預金残高（会社合計）
+    unit: 円
+    target: ""
+    direction: up_is_good
+    source_hint: "01_data/finance/ReSow_資金繰り表"
+
+  - id: cash_runway
+    label: 資金余力（月数）
+    unit: ヶ月
+    target: "3"
+    direction: up_is_good
+    source_hint: "現預金残高 ÷ 月次営業支出"
+
+  - id: monthly_operating_cf
+    label: 月次の経常収支
+    unit: 円
+    target: "0"
+    direction: up_is_good
+    source_hint: "01_data/finance/ReSow_資金繰り表（営業収入計 − 営業支出計）"
+
+  - id: data_freshness
+    label: データの鮮度
+    unit: ヶ月
+    target: "0.5"
+    direction: down_is_good
+    source_hint: "参照した各ファイルの最終更新日と今日の差。判断可能性そのものの指標"
+
+  # --- 損益 ---
+  - id: revenue_group
+    label: グループ売上高
+    unit: 円
+    target: ""
+    direction: up_is_good
+    source_hint: "01_data/master/ReSow_決算統合（年次）、01_data/operations/全事業月次売上（月次）"
+
+  - id: operating_profit
+    label: 営業利益
+    unit: 円
+    target: ""
+    direction: up_is_good
+    source_hint: "01_data/master/ReSow_決算統合"
+
+  - id: operating_margin
+    label: 営業利益率
+    unit: "%"
+    target: "5"
+    direction: up_is_good
+    source_hint: "御社KPIサマリの判定基準：5%以上で緑"
+
+  - id: ordinary_profit
+    label: 経常利益
+    unit: 円
+    target: ""
+    direction: up_is_good
+    source_hint: "営業利益との乖離が大きい場合は必ず理由を報告すること"
+
+  - id: sga_ratio
+    label: 販管費率
+    unit: "%"
+    target: "80"
+    direction: down_is_good
+    source_hint: "御社KPIサマリの判定基準：80%以下で緑"
+
+  # --- 費用構造 ---
+  - id: labor_cost_ratio
+    label: 人件費率（給与＋雑給）
+    unit: "%"
+    target: ""
+    direction: down_is_good
+    source_hint: "01_data/master/ReSow_決算統合。個人別給与は参照しない"
+
+  - id: outsourcing_ratio
+    label: 業務委託料率
+    unit: "%"
+    target: ""
+    direction: down_is_good
+    source_hint: "12期に売上比22.4%へ急増。推移を必ず追うこと"
+
+  - id: rent_ratio
+    label: 地代家賃率
+    unit: "%"
+    target: "10"
+    direction: down_is_good
+    source_hint: "御社KPIサマリの判定基準：10%以下で緑"
+
+  # --- 財務健全性（IPO準備） ---
+  - id: equity_ratio
+    label: 自己資本比率
+    unit: "%"
+    target: "20"
+    direction: up_is_good
+    source_hint: "法人別に報告。御社基準：20%以上で緑"
+
+  - id: current_ratio
+    label: 流動比率
+    unit: "%"
+    target: "100"
+    direction: up_is_good
+    source_hint: "法人別に報告。100%割れは即座に報告すること"
+
+  - id: debt_to_monthly_sales
+    label: 借入金月商比率
+    unit: ヶ月
+    target: "6"
+    direction: down_is_good
+    source_hint: "御社基準：6ヶ月以内で緑"
+
+  - id: debt_ebitda
+    label: 有利子負債/EBITDA
+    unit: 倍
+    target: ""
+    direction: down_is_good
+    source_hint: "01_data/master/ReSow_決算統合"
+
+  # --- 事業（福祉固有） ---
+  - id: users_count
+    label: 利用者数（事業所別）
+    unit: 人
+    target: ""
+    direction: up_is_good
+    source_hint: "01_data/operations（未提供。国保連請求データから作成可能）"
+
+  - id: site_revenue
+    label: 事業所別売上
+    unit: 円
+    target: ""
+    direction: up_is_good
+    source_hint: "01_data/operations/ReSow_全事業月次売上。急落・急伸の事業所を必ず名指しで報告"
+
+  - id: fc_royalty
+    label: FCロイヤリティ収入
+    unit: 円
+    target: ""
+    direction: up_is_good
+    source_hint: "01_data/operations/ReSow_全事業月次売上（FCロイヤリティ小計）"
+
+  - id: turnover_rate
+    label: 離職率
+    unit: "%"
+    target: ""
+    direction: down_is_good
+    source_hint: "01_data/hr（未提供）。集計値のみ"
