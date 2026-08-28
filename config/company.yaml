@@ -1,0 +1,87 @@
+# 会社の前提情報。クロ（COO）が毎回のレポートで参照します。
+company:
+  name: "ReSowホールディングス株式会社（グループ5社）"
+  business: "障害福祉サービス（就労継続支援B型・放課後等デイ・グループホーム・訪問看護・相談支援）およびFC本部"
+  group:
+    - name: "株式会社ワンダー"
+      role: "主力事業会社。WonderFriends / WonderKEA（就労継続支援B型）"
+      fiscal_year_end: "12月"
+    - name: "株式会社ReSowパートナーズ"
+      role: "就労事業（KS直営）・Emit・ギルド・COCOna・COCOto。R7.12にLifeQuestを吸収合併"
+      fiscal_year_end: "6月"
+    - name: "株式会社COCO"
+      role: "COCOde（グループホーム）"
+      fiscal_year_end: "3月"
+    - name: "ReSowホールディングス株式会社"
+      role: "持株会社"
+      fiscal_year_end: "3月"
+    - name: "LifeQuest株式会社"
+      role: "FC本部（R7.12 パートナーズへ吸収合併済・実績参照のみ）"
+      fiscal_year_end: "3月"
+    - name: "アベノドライクリーニング"
+      role: "クリーニング事業。MFクラウドに事業者として存在（月次巡回の対象。COCOの次にチェック）"
+      fiscal_year_end: "不明（初回接続時に確認）"
+    - name: "まろわの杜"
+      role: "未活動・帳簿なし（2026-08時点。巡回対象外）"
+      fiscal_year_end: "-"
+  brands:
+    ["WonderFriends", "WonderKEA", "COCOde", "COCOto", "COCOna",
+     "ワンダーギルド", "Emit", "FCロイヤリティ", "就労事業"]
+  note: "決算期が法人ごとに異なるため、合算は単純合算（連結消去なし）。比較時は必ずその旨を明記すること。"
+  # 組織再編の要点（組織再編沿革v4より・2026-08-22反映）
+  restructuring:
+    current_structure: "新HD（R7.10.6設立・熊野氏100%）の下にワンダー・COCO・パートナーズの3完全子会社（R8.1.1〜）"
+    key_facts:
+      - "HDは2社存在した：旧HD（R5.10.17設立→ReSowグループ㈱に商号変更→R8.1.1消滅）と新HD（R7.10.6設立・10月-9月決算）"
+      - "決算統合v11のHD数値（4-3月決算）は旧HDのもの。MF接続中のHDは新HD——会計期間の食い違いは齟齬ではなく別法人"
+      - "R8.1.1に3件の吸収合併：LQ→パートナーズ／いろんころん→ワンダー／ReSowグループ㈱→新HD"
+      - "R8.1.1に3件の商号変更：ワンダーフレンズ→ワンダー／COCOde→COCO／KSパートナーズ→ReSowパートナーズ"
+      - "R8.4.1：パートナーズの福祉事業→COCOへ吸収分割は会計上実施済みと確認（2026-08-23 MF照合：COCOに4月から売上11.9M/月・給与8.1M/月が出現、RSP給与は同月937K/月へ激減、開業費40MがRSP→COCOへ移転）。ただしRSPに就労売上20M/月が残存しており分割範囲は要確認"
+      - "1月の抱合せ株式消滅差益（ワンダー0.58M・HD8.4M）は上記合併の会計処理"
+
+ceo:
+  name: "熊野"
+  # CEOが今いちばん気にしていること。ここが報告の切り口を決めます。
+  priorities:
+    - "資金繰りを止めないこと（最優先）"
+    - "成長が利益と現金に変換されていない構造の解明"
+    - "IPO準備に耐えうる財務体質への転換"
+    - "運営指導・コンプライアンス上の重大リスクの早期検知"
+    - "属人化の解消と、数字が自動で回る体制づくり"
+  # 「これは自分が決める」と決めている領域（= decisions に上げるもの）
+  decision_scope:
+    - "資金調達・借入・返済条件の変更"
+    - "1,000万円以上の支出、および予算外の支出"
+    - "組織再編・法人間の資本移動"
+    - "M&A・新規出店・事業撤退"
+    - "IPO準備の進め方と外部専門家の起用"
+    - "幹部人事、および運営指導・行政対応の方針"
+    - "対外発表の内容とスタンス"
+
+reporting:
+  cadence: "weekly"
+  tone: "率直に。悪い数字ほど先に。事実と推測を必ず分ける。"
+  # 読まない資料（社長の指定。フォルダIDで固定）
+  excluded_sources:
+    - id: "1Jhq0dgJFrD3JKZ8IXYdiVRIztCaZuqyq"
+      name: "01_data/hr/30_健康情報"
+      reason: "要配慮個人情報"
+    - id: "1IbOzditKSK15HAgM-fQg5KP0EyYcvgor"
+      name: "01_data/private"
+      reason: "個人資産・非共有"
+    - id: "1BlY7zkzYBBzJA6CadDZkLYLkfwHpTvCu"
+      name: "支援記録PJ"
+      reason: "利用者の支援記録・要配慮個人情報"
+  restricted_sources:
+    - id: "1kli-XUe2z3gJ_DkJu-kfH4izBPdyR4Wm"
+      name: "01_data/hr/20_給与"
+      rule: "個人別データは参照しない。法人別・月別の集計値（人数・給与総額・法定福利費）のみ扱う。"
+  # Plaud録音（会議音声）の参照ルール（案・CEO承認待ち）
+  audio_sources:
+    rule: |
+      経営会議・取締役会・コア会議・資金調達関連の録音は参照可。
+      個人の人事・経費・処遇に関する録音は、CEOの明示指示があるときのみ参照する。
+  # 現用データ（資金繰り表・事業所別売上・議事録3本など）の実ファイルIDは
+  # Git管理外の config/local_sources.yaml に記録する（.gitignore 済み）。
+  # 恒久的には ReSow_00_MAP_v2 への登録が正（imp-104 参照）。
+  live_sources_file: "config/local_sources.yaml"

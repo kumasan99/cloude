@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>経営ダッシュボード - クロからCEOへの報告</title>
+  <link rel="stylesheet" href="/static/dashboard.css">
+</head>
+<body>
+  <header class="db-header">
+    <div class="db-header-inner">
+      <div class="db-brand">
+        <span class="db-avatar">クロ</span>
+        <div>
+          <h1>経営ダッシュボード</h1>
+          <p class="db-sub">COO クロ　→　CEO への報告</p>
+        </div>
+      </div>
+      <div class="db-actions">
+        <select id="reportSelect" class="db-select" title="過去のレポート"></select>
+        <button id="refreshBtn" class="db-btn db-btn-primary">レポートを更新</button>
+        <a href="/" class="db-btn db-btn-ghost">相談する</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="db-main" id="main">
+    <p class="db-loading">読み込み中...</p>
+  </main>
+
+  <div id="toast" class="db-toast" hidden></div>
+
+  <template id="tpl-empty">
+    <p class="db-empty"></p>
+  </template>
+
+  <script src="/static/dashboard.js"></script>
+</body>
+</html>
