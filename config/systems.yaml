@@ -1,0 +1,90 @@
+# ReSowグループ 利用システム台帳（クロが把握・監視する対象）
+# status: connected=クロが直接読める / drive=Drive経由で読める / indirect=他システム経由で把握 / none=未連携
+# クロは四半期ごとに各社の公式MCP提供状況を再確認し、直結できるようになり次第提案する。
+
+systems:
+  - name: マネーフォワード クラウド会計
+    role: 会計（全5社）
+    status: connected
+    via: 公式リモートMCP（1接続=1事業者。月次の切替週間で全社巡回）
+    note: 月次PL/BS/仕訳/取引先。スナップショットをDriveへ書き出し
+
+  - name: バクラク
+    role: 経費精算・請求書処理・法人カード（LayerX）
+    status: indirect
+    via: MF仕訳の摘要・メモに申請番号・申請者名・用途・バクラク申請URLが連携される（実測確認済み 2026-08-22）
+    note: >
+      公式MCPは未提供だが、バクラク経由の経費は MF仕訳だけで
+      「誰が・どの部門で・何のために・どこで・いくら」まで判定可能。
+      月次で明細スクリーニング（クロがフラグ→木村さんが判定）を運用する。
+      カード直（役員カード等・バクラクを通らない決済）は申請者・目的が構造的に欠落
+      ──8月開始のバクラク登録体制移行で解消される見込み。移行後の残存件数を毎月検証。
+      チェック担当者本人の経費は野原さんに回付（相互牽制）。
+
+  - name: オフィスステーション
+    role: 労務・勤怠管理
+    status: planned
+    via: RIN収集パイプライン（社内マシン/Cowork）経由で勤怠データを取り込み予定（2026-08-24開始予定・社長指示）
+    note: >
+      勤怠データは個人情報を含むため受け渡しはRIN_DBフォルダと同等の扱い。
+      記録分析部の分析観点に残業傾向（匿名集計）・36協定超過リスク・欠勤/休職の増加傾向を追加予定。
+      LINE WORKSで判明した「22時以降残業禁止」決定・休憩なし勤務の実態と突合する。
+
+  - name: Sansan
+    role: 名刺管理・人脈データ
+    status: none
+    via: 未連携（公式MCPなし。APIは契約プラン依存）
+    note: >
+      経営ダッシュボード上の優先度は低。ただしFC営業の属人化解消（FC商品再設計）や
+      金融機関・行政の接点管理で使う局面が来たら、CSVエクスポート→Drive を検討。
+
+  - name: Teachme Biz
+    role: マニュアル・手順書（松下さん主導・6ヶ月計画）
+    status: none
+    via: 未連携（公式MCPなし）
+    note: >
+      属人化解消KPIの進捗源。マニュアル作成本数・閲覧状況の管理レポートを
+      月次でDriveに置いてもらえれば、改善提案の進捗として追跡する。
+
+  - name: Plaud
+    role: 会議録音・文字起こし
+    status: connected
+    via: 公式MCP
+    note: 経営系の録音のみ参照可。個人の人事・処遇はCEO明示指示時のみ（ルール承認待ち）
+
+  - name: Google Drive / Docs / Sheets
+    role: 文書・データの保管（00.ReSow参謀AI）
+    status: connected
+    via: 公式MCP
+    note: 台帳は ReSow_00_MAP_v3
+
+  - name: Gmail / Google Calendar
+    role: メール・予定
+    status: connected
+    via: 公式MCP
+    note: 現在はダッシュボード未使用。督促・期日管理に使う構想はPhase 2で判断
+
+  - name: かんりくん
+    role: （用途確認中）
+    status: none
+    via: 未連携
+    note: 議事録で「継続について協議」中。継続判断が出たら役割と連携要否を確認
+
+  - name: Chatwork
+    role: 社内・社外コミュニケーション
+    status: none
+    via: 未連携。運営元kubellの公式MCPサーバーあり（ローカル実行型 @chatwork/mcp-server）
+    note: >
+      公式MCPはローカル型のため、リモートのクロから直結するには
+      APIトークンでの接続確認が必要（次の作業候補）。
+      社長のデスクトップ版Claude（Cowork）からは公式MCPで即接続可能。
+      読む範囲のルール（どのルームを対象にするか）は接続前にCEOと決める。
+
+  - name: LINE WORKS
+    role: 社内・現場コミュニケーション
+    status: none
+    via: 未連携。公式MCPなし（LINE Bot MCPは別製品・LINE公式アカウント用）
+    note: >
+      公式APIはあるため連携開発は可能だが、サードパーティ（CData等・有償）か
+      自前開発が必要。優先度はChatworkの後。
+      現場の兆候検知（苦情・ヒヤリハット・退職予兆）の情報源として価値は高い。
