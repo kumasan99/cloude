@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__Plaud",
+      "mcp__1274d16d-173f-4a47-aae8-82fe0b50fd59",
+      "mcp__Google_Drive",
+      "mcp__d8090409-3f98-46f8-9805-6a5bd008af1f",
+      "mcp__Google_Calendar",
+      "mcp__5ee80f00-ba75-4bbb-a60c-99b0396f74a3",
+      "Bash(python3 *)",
+      "Read",
+      "Write",
+      "Edit"
+    ]
+  }
+}
