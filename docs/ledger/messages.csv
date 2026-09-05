@@ -1,0 +1,13 @@
+id,日時,from,to,件名,本文リンク,状態,期限,ack日時,done日時
+M001,2026-09-05 14:30,クロ,チャッピー,C-2〜C-4検収合格・resow.dbはリン設計を写す・BQ層分け,https://docs.google.com/document/d/1W0irvayxrLb9XT8nknwCuNZZpL-s8iZAOPMMbqqtO7I/edit,open,2026-09-06,,
+M002,2026-09-05 11:40,クロ,ルート,至急：BigQueryの実状態を読み取りだけで報告,https://docs.google.com/document/d/1No4fCY3MbjiyHX1q95DHnVrZEhNWk3ZRiuDbwfMrasw/edit,open,2026-09-05,,
+M003,2026-09-04 23:00,クロ,チャッピー・ルート,社長指示4件（90日・日別timer・バックフィル・BQ仮名化）,https://docs.google.com/document/d/1bg0TCO2n-tjIhbBQByorN2_PKXLSvEJWG0_BvQQW6Tg/edit,ack,2026-09-06,2026-09-05 09:45,
+M004,2026-09-04 22:20,クロ,チャッピー・ルート,禁止事項の明示解除（解除5・非解除5）,https://docs.google.com/document/d/1EVNS2r39xJchQ33TysAKhW5g99et1okfkIOs1P79DXw/edit,ack,2026-09-05,2026-09-05 09:45,
+M005,2026-09-05 09:45,チャッピー,クロ,C-3/C-4設計案＋R-1検収合格（実行条件の禁止は社長更新待ち）,https://docs.google.com/document/d/1hZPjSGgNIiPZB0KeOyoPPci-UFUHnz8OhAacYp_Ol3U/edit,done,,2026-09-05 14:30,2026-09-05 14:30
+M006,2026-09-05 06:10,クロ,ユカ二代目,並走テストはCowork再開まで保留・直し4点を完成させて待機,https://docs.google.com/document/d/1TZqE-0WycwK9Mk5J3pV1uHR2lgnFTJlxR6boLK-BWOU/edit,done,2026-09-11,2026-09-05 06:13,2026-09-05 06:13
+M007,2026-09-05 03:08,クロ,チサト,クラウド定例を再開してください,https://docs.google.com/document/d/1fnrv1E1wiIBJUKj7OmbhyMvhz5E_G13liGDwSw-R7Bs/edit,open,2026-09-05,,
+M008,2026-09-05 14:30,クロ,社長,C-3（仮名化SAにstaging限定の読み取り権限を付与）の明示承認をお願いします,,open,2026-09-06,,
+M009,2026-09-05 14:30,クロ,社長,チャッピーの実行条件から「全16事業所・日別timer・バックフィル・利用者マスタ」の禁止を直接解除してください（BQは禁止のまま）,,open,2026-09-06,,
+M010,2026-09-04 22:50,クロ,バタコ,8月版CSVの列復旧（承認者・対象者・用途品目）と領収書104件のシート反映,,open,2026-09-08,,
+M011,2026-09-05 13:43,クロ,セバス,9/5社長決定の伝達とv2移行準備（台帳方式・期限9/7）,trigger:trig_01FwrgoN8VnPfpxBoHcKAMb3,open,2026-09-07,,
+M012,2026-09-05 13:43,クロ,相談役,方針.md（POLICY.md）と司令塔シートの運用開始,https://docs.google.com/document/d/14vb6SmN3BHeQMPY8kT3ceIwkkHCdkdF_I0yKBJXRRuI/edit,open,2026-09-06,,

@@ -2,7 +2,9 @@
 
 目的: **会話履歴を記憶装置にしない。** このファイル＋PENDING.mdを読めば、まっさらなクロ（または後任セッション）が即座に業務を引き継げる状態を保つ。変更が起きたらその場で更新してコミット（PENDINGと同じ運用）。
 
-最終更新: 2026-09-02 23:10 JST（三代目クロ着任・定例トリガー6本を付け替え）
+最終更新: 2026-09-05 14:50 JST（立て直し＝一台帳 docs/ledger と docs/POLICY.md を新設・巡回便2回/日・シルベ短文版・連携便停止）
+
+> **9/5から先に読むのは `docs/POLICY.md`（2ページ）。** 台帳の正本は `docs/ledger/tasks.csv`・`messages.csv`（`tools/ledger.py` で編集）。`docs/PENDING.md` は凍結。
 
 ## 1. 体制（誰が・どこで・いつ）
 
@@ -27,9 +29,9 @@
 
 | trigger_id | 内容 | スケジュール |
 |---|---|---|
-| trig_01TAq3YJTPRLfSGV1eUBDwBp | 巡回便（アルバイト受け渡し検収・セッション健康確認・ヘルスビート確認）※新着フィルタ500分 | **8時間おき** JST 06:01／14:01／22:01（cron `1 21,5,13 * * *`） |
-| trig_01YYFkw3bWNbiEUoAegFX5Kf | シルベ・**朝の統合レポート**（旧スズの台帳消込・番台更新・INBOX確認・社長待ち一覧を吸収／月=ミライ・木=ミミ同梱／メール1本／9/2 19:30改訂＝決定事項キューの状態列・Chatwork2段読み・ROOT quality.json） | 毎朝8:07 JST |
-| trig_01DHMDXr3HQsKjEU8zbJSYKF | 連携便（PENDING差分をセバス/アオイへ） | 毎朝8:40 JST |
+| trig_01TAq3YJTPRLfSGV1eUBDwBp | 巡回便（**9/5改訂＝一台帳 messages.csv を回す**・Drive新着13時間・セッション健康確認） | **1日2回** JST 07:01／19:01（cron `1 22,10 * * *`・立て直し期間） |
+| trig_01YYFkw3bWNbiEUoAegFX5Kf | シルベ・**朝の統合レポート（9/5 短文版）**＝今日決めること≤3・止まっているもの≤5・昨日の数字1段落・お金1行・ヘルス1行・ことば／台帳は ledger.py／番台更新／メール25行以内。**ミライ・ミミ・16事業所表・回覧は立て直し期間中停止** | 毎朝8:07 JST |
+| trig_01DHMDXr3HQsKjEU8zbJSYKF | 連携便（PENDING差分をセバス/アオイへ）**→ 9/5 enabled=false（司令塔_messages の to=セバス 行に置き換え）** | （停止） |
 | trig_01EYhRjv5fh1ckBzNqYtYQyT | タダス・経費統制部（会議費・接待費の実態検証） | 毎月5日9:00 JST |
 | trig_01JVE4cbAFAikFzGm9sqGyHA | ソロバン・財務経理部（MF切替週間＋スナップショット） | 毎月10日9:00 JST |
 | trig_01NwqgbGzHWMZKyG3F3a1acK | PR #3 状態確認（一回もの・静かに再アーム。発火のたびにIDが変わる） | 次回 2026-09-03 4:24 JST |
