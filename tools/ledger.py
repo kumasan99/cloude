@@ -11,7 +11,7 @@
   python3 tools/ledger.py msgs ack  M011
   python3 tools/ledger.py msgs done M011
   python3 tools/ledger.py export  # Drive投入用CSVを scratchpad に出す（次の一手は140字で切る）
-  python3 tools/ledger.py stale   # st=doing のまま更新日が2時間以上前（日付単位で判定）の行を failed に戻す（命綱・毎巡回）
+  python3 tools/ledger.py stale [時間]  # st=doing のまま upd_at（11列目・JST時刻）が既定24時間以上更新されていない行を failed に戻す（命綱・毎巡回）
   python3 tools/ledger.py archive # tasks: st=done かつ更新日30日超 → docs/ledger/archive/tasks-YYYY-MM.csv／messages: done かつ14日超 → messages-YYYY-MM.csv
 st 列（tasks 10列目）は todo/doing/done/failed/blocked の5語だけ。upd --st で変える。
 日付は JST の今日を自動で入れる。列の並びは変えない。
@@ -32,11 +32,13 @@ def nextid(rows,prefix):
 def main(a):
     if not a: print(__doc__); return
     if a[0]=='stale':
-        rows=load(T); n=0; td=today()
+        rows=load(T); n=0; hours=int(a[1]) if len(a)>1 else 24
         for r in rows[1:]:
-            while len(r)<10: r.append('')
-            if r[9]=='doing' and r[7]!=td:
-                r[9]='failed'; r[6]=('stale→failed（更新'+r[7]+'）; '+r[6])[:200]; n+=1
+            while len(r)<11: r.append('')
+            try: t=datetime.datetime.strptime(r[10],'%Y-%m-%d %H:%M').replace(tzinfo=JST)
+            except Exception: t=None
+            if r[9]=='doing' and t and (now()-t).total_seconds()>hours*3600:
+                r[9]='failed'; r[6]=('stale→failed（最終更新 '+r[10]+'）; '+r[6])[:200]; n+=1
         save(T,rows); print('stale→failed',n); return
     if a[0]=='archive':
         import os as _o; ad=_o.path.join(ROOT,'docs/ledger/archive'); _o.makedirs(ad,exist_ok=True)
@@ -75,7 +77,7 @@ def main(a):
             print(' | '.join([r[0],r[1] if kind=='tasks' else r[4],r[6],r[5] if kind=='tasks' else r[7]]))
     elif cmd=='add' and kind=='tasks':
         件名,次,担当,待ち,期日,状態,出典=(a[2:]+['']*7)[:7]
-        rows.append([nextid(rows,'T'),件名,次,担当,待ち,期日,状態,today(),出典 or '司令塔']); save(p,rows); print(rows[-1][0])
+        rows.append([nextid(rows,'T'),件名,次,担当,待ち,期日,状態,today(),出典 or '司令塔','todo',stamp()]); save(p,rows); print(rows[-1][0])
     elif cmd=='add' and kind=='msgs':
         frm,to,件名,link,期限=(a[2:]+['']*5)[:5]
         rows.append([nextid(rows,'M'),stamp(),frm,to,件名,link,'open',期限,'','']); save(p,rows); print(rows[-1][0])
@@ -92,7 +94,9 @@ def main(a):
                 if o.st:
                     while len(r)<10: r.append('')
                     r[9]=o.st
-                r[7]=today(); save(p,rows); print('updated',o.id); return
+                r[7]=today()
+                while len(r)<11: r.append('')
+                r[10]=stamp(); save(p,rows); print('updated',o.id); return
         print('not found',o.id); sys.exit(1)
     elif cmd in ('ack','done') and kind=='msgs':
         for r in rows[1:]:
