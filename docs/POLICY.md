@@ -1,11 +1,16 @@
 # 方針（相談役・全AIが最初に読む2ページ）
 
-最終更新: 2026-09-05 14:50 JST（クロ三代目）。この文書は**社長の決定を写したもの**。決定を変えられるのは社長だけ。クロは行を足す・日付を直す。
+最終更新: 2026-09-05 18:30 JST（v1.1・クロ三代目）。**正本ブランチ＝ `claude/resow-coo-handover-vi59bt`**（mainへの統合は社長がPRをマージした時点で切り替え、その日にこの行を書き換える）。この文書は**社長の決定を写したもの**。決定を変えられるのは社長だけ。クロは行を足す・日付を直す。
 
 ## 0. 位置づけ
 - 読む順番: **①この方針 → ②司令塔シート（tasks・messages） → ③番台**。この3つで今日の状況が分かる。会話履歴は読まない。
 - 正本の場所: `docs/ledger/tasks.csv`（案件・1行1件）と `docs/ledger/messages.csv`（やりとり・1行1通）。ブランチ `claude/resow-coo-handover-vi59bt`。編集は `python3 tools/ledger.py`（列ずれ防止）。
 - Driveの写し（読む用・人とCowork向け）: 司令塔_tasks `1qUSaDw9NusLkIXgoio4U4_pfxHtayb6xs0ESri7cAm4`／司令塔_messages `1tEywqZ3iclv0EydJDUfznp5U9vpl7-TJg2B-YdwQFPY`（00_連絡板直下）。Driveコネクタはシートのセルを書けないので、写しは巡回便・シルベが作り直す（IDが変わったら番台のリンクを直す）。
+- **状態は5語だけ**（tasks.csv の `st` 列）: todo／doing／done／failed／blocked。自由文の「状態」列は人が読む補足。
+- **命綱＝棚卸し**: 巡回のたびに `python3 tools/ledger.py stale` を走らせ、`doing` のまま更新日が当日でない行を `failed` に戻して再投入する（判定は日単位。容器ごと落ちた作業は自分で failed を書けないので、この棚卸しが実際の検知手段。作業側が failed＋理由を書くのは「気づいて終われた場合」の上乗せ）。
+- **リーダーに全文を渡さない**: 作業側からの報告は要約2行＋成果物の場所だけ。リーダーは summary で検収し、必要なときだけ本体を開く。
+- **育たせない**: `python3 tools/ledger.py archive` で tasks は done かつ30日超、messages は done かつ14日超を `docs/ledger/archive/` の月別CSVへ移す。どちらも200行を超えたら先にアーカイブ。
+- **リーダー（クロ）は使い捨てにする**: 起動→POLICY.md と台帳を読む→棚卸し→検収→次を起票→書き戻して終了。会話履歴に頼らない。毎回新しいセッションで動かす巡回トリガーは、コネクタが付く **claude.ai の定期タスク画面から社長が作る**（クロが作るトリガーにはコネクタが付かない）。三代目は、四代目が2巡回で「failed検知→再投入」を実演してから退役する（同日に詰め込まない）。
 - `docs/PENDING.md` は **2026-09-05で凍結**（#1〜#87の全文保管庫）。以後は tasks.csv に書く。
 - 番台（社長が見る画面）: https://claude.ai/code/artifact/8a6127fc-8426-490a-aca0-0d87d2ac0c7b
 

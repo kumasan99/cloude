@@ -11,6 +11,9 @@
   python3 tools/ledger.py msgs ack  M011
   python3 tools/ledger.py msgs done M011
   python3 tools/ledger.py export  # Drive投入用CSVを scratchpad に出す（次の一手は140字で切る）
+  python3 tools/ledger.py stale   # st=doing のまま更新日が2時間以上前（日付単位で判定）の行を failed に戻す（命綱・毎巡回）
+  python3 tools/ledger.py archive # tasks: st=done かつ更新日30日超 → docs/ledger/archive/tasks-YYYY-MM.csv／messages: done かつ14日超 → messages-YYYY-MM.csv
+st 列（tasks 10列目）は todo/doing/done/failed/blocked の5語だけ。upd --st で変える。
 日付は JST の今日を自動で入れる。列の並びは変えない。
 """
 import csv, sys, os, datetime, argparse
@@ -28,6 +31,36 @@ def nextid(rows,prefix):
     n=max([int(r[0][1:]) for r in rows[1:] if r and r[0].startswith(prefix)]+[0]); return f'{prefix}{n+1:03d}'
 def main(a):
     if not a: print(__doc__); return
+    if a[0]=='stale':
+        rows=load(T); n=0; td=today()
+        for r in rows[1:]:
+            while len(r)<10: r.append('')
+            if r[9]=='doing' and r[7]!=td:
+                r[9]='failed'; r[6]=('stale→failed（更新'+r[7]+'）; '+r[6])[:200]; n+=1
+        save(T,rows); print('stale→failed',n); return
+    if a[0]=='archive':
+        import os as _o; ad=_o.path.join(ROOT,'docs/ledger/archive'); _o.makedirs(ad,exist_ok=True)
+        def cut(path,keep,arcname,datecol):
+            rows=load(path); hdr=rows[0]; stay=[hdr]; moved={}
+            for r in rows[1:]:
+                if keep(r): stay.append(r)
+                else:
+                    ym=(r[datecol] or '0000-00')[:7].replace('-0','-') ; moved.setdefault(ym,[]).append(r)
+            for ym,rs in moved.items():
+                fp=_o.path.join(ad,f'{arcname}-{ym}.csv'); new=not _o.path.exists(fp)
+                with open(fp,'a',encoding='utf-8',newline='') as f:
+                    w=csv.writer(f,lineterminator='\n')
+                    if new: w.writerow(hdr)
+                    w.writerows(rs)
+            save(path,stay); print(arcname,'archived',sum(len(v) for v in moved.values()),'kept',len(stay)-1)
+        import datetime as _d
+        def age(s):
+            try:
+                y,m,d=[int(x) for x in s[:10].split('-')]; return (now().date()-_d.date(y,m,d)).days
+            except Exception: return 0
+        cut(T, lambda r: not (len(r)>9 and r[9]=='done' and age(r[7])>30), 'tasks', 7)
+        cut(M, lambda r: not (r[6]=='done' and age(r[9] or r[1])>14), 'messages', 1)
+        return
     if a[0]=='export':
         sp=os.environ.get('SCRATCHPAD','.')
         rows=load(T)
@@ -47,7 +80,7 @@ def main(a):
         frm,to,件名,link,期限=(a[2:]+['']*5)[:5]
         rows.append([nextid(rows,'M'),stamp(),frm,to,件名,link,'open',期限,'','']); save(p,rows); print(rows[-1][0])
     elif cmd=='upd' and kind=='tasks':
-        ap=argparse.ArgumentParser(); ap.add_argument('id'); ap.add_argument('--next'); ap.add_argument('--status'); ap.add_argument('--owner'); ap.add_argument('--wait'); ap.add_argument('--due')
+        ap=argparse.ArgumentParser(); ap.add_argument('id'); ap.add_argument('--next'); ap.add_argument('--status'); ap.add_argument('--owner'); ap.add_argument('--wait'); ap.add_argument('--due'); ap.add_argument('--st',choices=['todo','doing','done','failed','blocked'])
         o=ap.parse_args(a[2:])
         for r in rows[1:]:
             if r[0]==o.id:
@@ -56,6 +89,9 @@ def main(a):
                 if o.wait: r[4]=o.wait
                 if o.due: r[5]=o.due
                 if o.status: r[6]=o.status
+                if o.st:
+                    while len(r)<10: r.append('')
+                    r[9]=o.st
                 r[7]=today(); save(p,rows); print('updated',o.id); return
         print('not found',o.id); sys.exit(1)
     elif cmd in ('ack','done') and kind=='msgs':
