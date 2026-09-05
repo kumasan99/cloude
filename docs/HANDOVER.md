@@ -2,14 +2,16 @@
 
 ## ★社長がやること（これだけ）
 
-新しいチャットを開いて、**下の枠の中だけ**を貼ってください。あとは三代目が自分で読みます。
+新しいチャットを開いて、**下の枠の中だけ**を貼ってください。あとは新しいクロが自分で読みます。
+
+（三代目は 2026-09-02 23:10 に着任済み。次に貼るときは「三代目」を「四代目」に、ブランチ名を最新のものに直してから貼ること。三代目の作業ブランチは `claude/resow-coo-handover-vi59bt`）
 
 ```
 あなたはReSowホールディングス（社長：熊野賢／くまくま社長 🐈‍⬛）のCOO「クロ」の三代目です。
 まず次を実行してから話し始めてください。
 
-1. git fetch origin claude/resow-coo-handover-m69l7r
-   git checkout claude/resow-coo-handover-m69l7r
+1. git fetch origin claude/resow-coo-handover-vi59bt
+   git checkout claude/resow-coo-handover-vi59bt
    （このリポジトリの既定ブランチには引き継ぎ書がありません。必ずこのブランチに移ること）
 2. docs/HANDOVER.md を最後まで読む
 3. docs/HANDBOOK.md と docs/PENDING.md を読む
@@ -23,7 +25,7 @@
 
 
 初代クロ（session_01LBSUnGd772xYALnNMNfupj・2026-08-22〜08-27）が作成。
-**二代目クロ（session_01BABgA95T5pZKwup5aG9ZFP・2026-08-27〜）が2026-09-02に全面改訂。**
+**二代目クロ（session_01BABgA95T5pZKwup5aG9ZFP・2026-08-27〜09-02）が2026-09-02に全面改訂。三代目クロ（session_01ExCFXpGxBjrsqFsGk7Ro31・2026-09-02〜）が同日23:10にトリガー付け替えの結果を追記。**
 以降の世代交代でも、下の枠の中を最新化して使い回すこと。
 
 ## 交代の判断材料（数字で決める）
@@ -59,14 +61,18 @@
 
 `docs/TRIGGERS_BACKUP.md` に6本の全文とcronが入っています。**「触ってはいけないトリガー」の表も同じ文書にあります。**
 
-| 定例 | cron(UTC) | JST | 旧trigger_id |
-|---|---|---|---|
-| 巡回便 | `1 21,5,13 * * *` | 8時間おき 06:01/14:01/22:01 | trig_01BP3dbxs2sC9ixjUJKeTCiM |
-| シルベ朝の統合レポート | `7 23 * * *` | 8:07 | trig_01Avqbeq1Xii47bvmt4QuoJk |
-| 連携便 | `40 23 * * *` | 8:40 | trig_01YZe8eyK777KVh6FnN69YPQ |
-| 経費統制部（月次） | `0 0 5 * *` | 毎月5日 9:00 | trig_018KHDkHBtmFGs1GQfooTqsz |
-| 財務経理部（月次） | `0 0 10 * *` | 毎月10日 9:00 | trig_01TaX42HVNa9c1zn4vBeLsq1 |
-| PR #3 状態確認 | （one-shot再アーム） | — | trig_01U3iuEimWF7NQ7MGHPSJ97w |
+**→ 2026-09-02 23:10 三代目（session_01ExCFXpGxBjrsqFsGk7Ro31）が付け替え完了。二代目の旧IDは削除済み。**
+
+| 定例 | cron(UTC) | JST | 旧trigger_id（二代目・削除済） | 新trigger_id（三代目） |
+|---|---|---|---|---|
+| 巡回便 | `1 21,5,13 * * *` | 8時間おき 06:01/14:01/22:01 | trig_01BP3dbxs2sC9ixjUJKeTCiM | trig_01TAq3YJTPRLfSGV1eUBDwBp |
+| シルベ朝の統合レポート | `7 23 * * *` | 8:07 | trig_01Avqbeq1Xii47bvmt4QuoJk | trig_01YYFkw3bWNbiEUoAegFX5Kf |
+| 連携便 | `40 23 * * *` | 8:40 | trig_01YZe8eyK777KVh6FnN69YPQ | trig_01DHMDXr3HQsKjEU8zbJSYKF |
+| 経費統制部（月次） | `0 0 5 * *` | 毎月5日 9:00 | trig_018KHDkHBtmFGs1GQfooTqsz | trig_01EYhRjv5fh1ckBzNqYtYQyT |
+| 財務経理部（月次） | `0 0 10 * *` | 毎月10日 9:00 | trig_01TaX42HVNa9c1zn4vBeLsq1 | trig_01JVE4cbAFAikFzGm9sqGyHA |
+| PR #3 状態確認 | （one-shot再アーム） | 9/3 4:24 | trig_01U3iuEimWF7NQ7MGHPSJ97w | trig_01NwqgbGzHWMZKyG3F3a1acK |
+
+付け替えで分かったこと（四代目へ）: **バックアップ文書は本番より古いことがある**（シルベが9/2 19:30改訂を未反映だった）。`list_triggers` の結果はファイルに落ちるので、python で自分のセッション紐づき分のプロンプトを抜き出し、バックアップと diff してから作ること。番台の更新手順は新セッションでは url 指定が必須。
 
 **スズ（18時定例）は2026-09-02に廃止しました。**社長指示で「レポートは朝に集約」となり、朝のシルベ1本に統合しています。復活させないこと。
 
